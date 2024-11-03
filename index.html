@@ -41,9 +41,12 @@
                     dimensioneInput.style.display = 'block';
                     coloreUgelloInput.style.display = 'block';
                     coloreColloInput.style.display = 'block';
+                    coloreColloInput.required = true; // Rendi richiesto
                 } else if (selectedModello === 'ctm' || selectedModello === 'ctm2') {
                     dimensioneInput.style.display = 'block';
                     coloreUgelloInput.style.display = 'block';
+                    coloreColloInput.style.display = 'none';
+                    coloreColloInput.required = false; // Rendi facoltativo
                 }
             });
 
