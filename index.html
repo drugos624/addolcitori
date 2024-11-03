@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci Dati Firestore</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Inserisci Dati</h1>
+        <form id="dataForm">
+            <input type="text" id="modello" placeholder="Modello" required>
+            <input type="text" id="dimensione" placeholder="Dimensione" required>
+            <button type="submit">Inserisci</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
