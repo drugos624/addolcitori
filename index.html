@@ -7,7 +7,7 @@
     <script type="module">
         // Import Firebase 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         // Configura il tuo progetto Firebase
         const firebaseConfig = {
@@ -25,9 +25,9 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const modelloSelect = document.getElementById('modello');
-            const dimensioneInput = document.getElementById('dimensioneInput');
-            const coloreUgelloInput = document.getElementById('coloreUgelloInput');
-            const coloreColloInput = document.getElementById('coloreColloInput');
+            const dimensioneInput = document.getElementById('dimensione');
+            const coloreUgelloInput = document.getElementById('coloreUgello');
+            const coloreColloInput = document.getElementById('coloreCollo');
 
             modelloSelect.addEventListener('change', () => {
                 const selectedModello = modelloSelect.value;
@@ -49,21 +49,36 @@
 
             document.getElementById('dataForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const modello = modelloSelect.value; // Questo rappresenta il nome del modello selezionato
+                const modello = modelloSelect.value; // Ottieni il modello selezionato
                 const dimensione = document.getElementById('dimensione').value;
                 const coloreUgello = document.getElementById('coloreUgello').value;
                 const coloreCollo = document.getElementById('coloreCollo').value;
+
+                // Controlla se il campo di modello è selezionato
+                if (!modello) {
+                    document.getElementById('message').innerText = 'Seleziona un modello!';
+                    return;
+                }
+
+                // Controlla la visibilità e la validità dei campi
+                if ((modello === 'he' || modello === 'he1') && (!dimensione || !coloreUgello || !coloreCollo)) {
+                    document.getElementById('message').innerText = 'Compila tutti i campi richiesti!';
+                    return;
+                } else if ((modello === 'ctm' || modello === 'ctm2') && (!dimensione || !coloreUgello)) {
+                    document.getElementById('message').innerText = 'Compila tutti i campi richiesti!';
+                    return;
+                }
 
                 // Crea un oggetto dati da inserire
                 const dati = {
                     dimensione: dimensione,
                     coloreUgello: coloreUgello,
-                    coloreCollo: coloreCollo
+                    coloreCollo: coloreCollo || null // Aggiungi solo se esiste
                 };
 
                 try {
                     // Usa il nome del modello come ID del documento
-                    await setDoc(doc(db, 'modelli', modello), dati); // 'modelli' è la tua collezione e 'modello' è la chiave del documento
+                    await setDoc(doc(db, 'modelli', modello), dati);
                     document.getElementById('message').innerText = 'Dati inseriti con successo!';
                     document.getElementById('dataForm').reset();
                 } catch (error) {
@@ -73,12 +88,6 @@
             });
         });
     </script>
-    <style>
-        /* Aggiunta di stili per nascondere i campi all'inizio */
-        #dimensioneInput, #coloreUgelloInput, #coloreColloInput {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <h1>Inserisci Dati</h1>
@@ -91,20 +100,20 @@
             <option value="ctm">CTM</option>
             <option value="ctm2">CTM 2.0</option>
         </select>
-
-        <div id="dimensioneInput">
+        
+        <div>
             <label for="dimensione">Dimensione:</label>
-            <input type="text" id="dimensione" required>
+            <input type="text" id="dimensione" required style="display:none;">
         </div>
-
-        <div id="coloreUgelloInput">
+        
+        <div>
             <label for="coloreUgello">Colore Ugello:</label>
-            <input type="text" id="coloreUgello" required>
+            <input type="text" id="coloreUgello" required style="display:none;">
         </div>
-
-        <div id="coloreColloInput">
+        
+        <div>
             <label for="coloreCollo">Colore Collo:</label>
-            <input type="text" id="coloreCollo" required>
+            <input type="text" id="coloreCollo" required style="display:none;">
         </div>
 
         <button type="submit">Inserisci</button>
