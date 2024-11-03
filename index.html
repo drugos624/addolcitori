@@ -125,10 +125,15 @@
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
+            const coloreUgello = document.getElementById('coloreUgello');
 
-            // Mostra il form solo se il modello selezionato è Ctm Old o Ctm 2.0
-            if (modello === "ctm old" || modello === "ctm 2.0") {
+            // Mostra il form e i campi aggiuntivi in base al modello selezionato
+            if (modello === "he 1" || modello === "he 1.5") {
                 form.classList.remove('hidden');
+                coloreUgello.parentElement.classList.add('hidden');
+            } else if (modello === "ctm old" || modello === "ctm 2.0") {
+                form.classList.remove('hidden');
+                coloreUgello.parentElement.classList.remove('hidden');
             } else {
                 form.classList.add('hidden');
             }
@@ -143,7 +148,7 @@
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
-            if (modello && dimensione && quantitaResina && quantitaSabbia && coloreUgello && dimensioneCollo && spazioLibero) {
+            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
                 db.collection("modelli").doc(modello).set({
                     dimensione: dimensione,
                     quantitaResina: quantitaResina,
