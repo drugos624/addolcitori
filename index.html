@@ -60,8 +60,16 @@
 </head>
 <body>
     <h1>Seleziona Modello</h1>
-    <label for="modello">Modello:</label>
-    <select id="modello" onchange="showFields()">
+    
+    <label for="addolcitori">Addolcitori:</label>
+    <select id="addolcitori" onchange="showModels()">
+        <option value="">-- Seleziona --</option>
+        <option value="he">HE</option>
+        <option value="ctm">CTM</option>
+    </select>
+
+    <label for="modello" class="hidden" id="modelloLabel">Modello:</label>
+    <select id="modello" class="hidden" onchange="showFields()">
         <option value="">-- Seleziona --</option>
         <option value="he 1">HE 1</option>
         <option value="he 1.5">HE 1.5</option>
@@ -146,6 +154,25 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        function showModels() {
+            const addolcitori = document.getElementById('addolcitori').value;
+            const modelloSelect = document.getElementById('modello');
+            const modelloLabel = document.getElementById('modelloLabel');
+
+            if (addolcitori) {
+                modelloLabel.classList.remove('hidden');
+                modelloSelect.classList.remove('hidden');
+            } else {
+                modelloLabel.classList.add('hidden');
+                modelloSelect.classList.add('hidden');
+                document.getElementById('modelloForm').classList.add('hidden');
+            }
+
+            // Pulisci la selezione del modello
+            modelloSelect.selectedIndex = 0;
+            showFields();
+        }
+
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
@@ -153,12 +180,16 @@
             const coloreInsertiContainer = document.getElementById('coloreInsertiContainer');
 
             // Mostra il form e i campi aggiuntivi in base al modello selezionato
-            form.classList.remove('hidden');
-            coloreUgelloContainer.classList.remove('hidden');
-            if (modello === "ctm old" || modello === "ctm 2.0") {
-                coloreInsertiContainer.classList.remove('hidden');
+            if (modello) {
+                form.classList.remove('hidden');
+                coloreUgelloContainer.classList.remove('hidden');
+                if (modello === "ctm old" || modello === "ctm 2.0") {
+                    coloreInsertiContainer.classList.remove('hidden');
+                } else {
+                    coloreInsertiContainer.classList.add('hidden');
+                }
             } else {
-                coloreInsertiContainer.classList.add('hidden');
+                form.classList.add('hidden');
             }
         }
 
@@ -170,38 +201,33 @@
             const quantitaSale = document.getElementById('quantitaSale').value;
             const quantitaResina = document.getElementById('quantitaResina').value;
             const quantitaSabbia = document.getElementById('quantitaSabbia').value;
-            const coloreUgello = document.getElementById('coloreUgello').value;
-            const coloreInserti = document.getElementById('coloreInserti').value;
-            const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
+            const coloreUgello = document.getElementById('coloreUgello').value;
+            const dimensioneCollo = document.getElementById('dimensioneCollo').value;
+            const coloreInserti = document.getElementById('coloreInserti').value;
 
-            // Crea un identificatore unico per il documento
-            const documentId = `addolcitori - ${modello} - ${dimensione}`;
+            const dati = {
+                modello,
+                dimensione,
+                capacitaScambio,
+                minutiAcquaSale,
+                quantitaSale,
+                quantitaResina,
+                quantitaSabbia,
+                spazioLibero,
+                coloreUgello,
+                dimensioneCollo,
+                coloreInserti: coloreInserti || null
+            };
 
-            if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
-                db.collection("modelli").doc(documentId).set({
-                    dimensione: dimensione,
-                    capacitaScambio: capacitaScambio,
-                    minutiAcquaSale: minutiAcquaSale,
-                    quantitaSale: quantitaSale,
-                    quantitaResina: quantitaResina,
-                    quantitaSabbia: quantitaSabbia,
-                    coloreUgello: coloreUgello,
-                    coloreInserti: coloreInserti,
-                    dimensioneCollo: dimensioneCollo,
-                    spazioLibero: spazioLibero,
-                }).then(() => {
+            // Salva i dati in Firestore
+            db.collection("modelli").add(dati)
+                .then(() => {
                     alert("Dati inviati con successo!");
-                    // Pulisce i campi del modulo dopo l'invio
-                    document.getElementById('modelloForm').reset();
-                    document.getElementById('modello').selectedIndex = 0;
-                    showFields(); // Nasconde di nuovo i campi
-                }).catch((error) => {
-                    console.error("Errore nell'invio dei dati: ", error);
+                })
+                .catch((error) => {
+                    alert("Errore nell'invio dei dati: " + error);
                 });
-            } else {
-                alert("Per favore, compila tutti i campi richiesti.");
-            }
         }
     </script>
 </body>
