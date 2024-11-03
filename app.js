@@ -1,11 +1,12 @@
 // Configura il tuo progetto Firebase
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+ apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
+    authDomain: "addolcitori-2f8fe.firebaseapp.com",
+    databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "addolcitori-2f8fe",
+    storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+    messagingSenderId: "399702428879",
+    appId: "1:399702428879:web:4bee57dcdc3b80eea8bbba"
 };
 
 // Inizializza Firebase
