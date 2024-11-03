@@ -3,21 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inserimento Dati Addolcitori</title>
-    <script type="module" src="firebaseInit.js"></script>
-    <script type="module" src="app.js"></script>
+    <title>Inserisci Dati</title>
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configura il tuo progetto Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
+            authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "addolcitori-2f8fe",
+            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+            messagingSenderId: "399702428879",
+            appId: "1:399702428879:web:4bee57dcdc3b80eea8bbba"
+        };
+
+        // Inizializza Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('dataForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const modello = document.getElementById('modello').value;
+                const dimensione = document.getElementById('dimensione').value;
+
+                try {
+                    await addDoc(collection(db, 'modelli'), {
+                        modello: modello,
+                        dimensione: dimensione
+                    });
+                    document.getElementById('message').innerText = 'Dati inseriti con successo!';
+                    document.getElementById('dataForm').reset();
+                } catch (error) {
+                    console.error("Errore durante l'inserimento dei dati: ", error);
+                    document.getElementById('message').innerText = 'Errore durante l\'inserimento dei dati.';
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <h1>Inserisci Dati Addolcitori</h1>
+    <h1>Inserisci Dati</h1>
     <form id="dataForm">
         <label for="modello">Modello:</label>
         <input type="text" id="modello" required>
-        <br>
         <label for="dimensione">Dimensione:</label>
         <input type="text" id="dimensione" required>
-        <br>
-        <button type="submit">Inserisci Dati</button>
+        <button type="submit">Inserisci</button>
     </form>
-    <div id="message"></div>
+    <p id="message"></p>
 </body>
 </html>
