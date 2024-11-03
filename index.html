@@ -23,44 +23,48 @@
         <option value="HiFlow">HiFlow</option>
     </select>
 
-    <div id="heFields" class="hidden">
-        <h3>Campi per HE 1 e HE 1,5</h3>
-        <label for="dimensione">Dimensione:</label>
-        <input type="text" id="dimensione" name="dimensione" required><br>
+    <form id="impiantoForm">
+        <div id="heFields" class="hidden">
+            <h3>Campi per HE 1 e HE 1,5</h3>
+            <label for="dimensione">Dimensione:</label>
+            <input type="text" id="dimensione" name="dimensione" required><br>
 
-        <label for="coloreUgello">Colore Ugello:</label>
-        <input type="text" id="coloreUgello" name="coloreUgello" required><br>
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" name="coloreUgello" required><br>
 
-        <label for="dimensioneCollo">Dimensione Collo:</label>
-        <input type="text" id="dimensioneCollo" name="dimensioneCollo" required><br>
+            <label for="dimensioneCollo">Dimensione Collo:</label>
+            <input type="text" id="dimensioneCollo" name="dimensioneCollo" required><br>
 
-        <label for="quantitaResina">Quantità Resina:</label>
-        <input type="number" id="quantitaResina" name="quantitaResina" required><br>
+            <label for="quantitaResina">Quantità Resina:</label>
+            <input type="number" id="quantitaResina" name="quantitaResina" required><br>
 
-        <label for="quantitaSottoletto">Quantità Sottoletto:</label>
-        <input type="number" id="quantitaSottoletto" name="quantitaSottoletto" required><br>
+            <label for="quantitaSottoletto">Quantità Sottoletto:</label>
+            <input type="number" id="quantitaSottoletto" name="quantitaSottoletto" required><br>
 
-        <label for="spazioLibero">Spazio Libero:</label>
-        <input type="number" id="spazioLibero" name="spazioLibero" required><br>
-    </div>
+            <label for="spazioLibero">Spazio Libero:</label>
+            <input type="number" id="spazioLibero" name="spazioLibero" required><br>
+        </div>
 
-    <div id="ctmFields" class="hidden">
-        <h3>Campi per CTM Old e CTM 2.0</h3>
-        <label for="dimensione">Dimensione:</label>
-        <input type="text" id="dimensione" name="dimensione" required><br>
+        <div id="ctmFields" class="hidden">
+            <h3>Campi per CTM Old e CTM 2.0</h3>
+            <label for="dimensione">Dimensione:</label>
+            <input type="text" id="dimensione" name="dimensione" required><br>
 
-        <label for="coloreUgello">Colore Ugello:</label>
-        <input type="text" id="coloreUgello" name="coloreUgello" required><br>
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" name="coloreUgello" required><br>
 
-        <label for="quantitaResina">Quantità Resina:</label>
-        <input type="number" id="quantitaResina" name="quantitaResina" required><br>
+            <label for="quantitaResina">Quantità Resina:</label>
+            <input type="number" id="quantitaResina" name="quantitaResina" required><br>
 
-        <label for="quantitaSabbia">Quantità Sabbia:</label>
-        <input type="number" id="quantitaSabbia" name="quantitaSabbia" required><br>
+            <label for="quantitaSabbia">Quantità Sabbia:</label>
+            <input type="number" id="quantitaSabbia" name="quantitaSabbia" required><br>
 
-        <label for="spazioLibero">Spazio Libero:</label>
-        <input type="number" id="spazioLibero" name="spazioLibero" required><br>
-    </div>
+            <label for="spazioLibero">Spazio Libero:</label>
+            <input type="number" id="spazioLibero" name="spazioLibero" required><br>
+        </div>
+
+        <button type="submit">Invia</button>
+    </form>
 
     <script>
         function showFieldsForSelectedImpianto() {
@@ -73,7 +77,7 @@
             ctmFields.classList.add('hidden');
 
             // Rimuovi l'attributo required da tutti gli input
-            document.querySelectorAll('input').forEach(input => input.required = false);
+            document.querySelectorAll('#impiantoForm input').forEach(input => input.required = false);
 
             // Mostra i campi in base al modello selezionato e aggiungi required
             if (impianto === "he 1" || impianto === "he 1,5") {
