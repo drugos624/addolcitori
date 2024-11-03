@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserisci Dati</title>
     <script type="module">
-        // Import Firebase
+        // Import Firebase 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
@@ -13,7 +13,6 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
             authDomain: "addolcitori-2f8fe.firebaseapp.com",
-            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "addolcitori-2f8fe",
             storageBucket: "addolcitori-2f8fe.firebasestorage.app",
             messagingSenderId: "399702428879",
@@ -25,15 +24,42 @@
         const db = getFirestore(app);
 
         document.addEventListener('DOMContentLoaded', () => {
+            const modelloSelect = document.getElementById('modello');
+            const dimensioneInput = document.getElementById('dimensioneInput');
+            const coloreUgelloInput = document.getElementById('coloreUgelloInput');
+            const coloreColloInput = document.getElementById('coloreColloInput');
+
+            modelloSelect.addEventListener('change', () => {
+                const selectedModello = modelloSelect.value;
+                // Nascondi tutti i campi
+                dimensioneInput.style.display = 'none';
+                coloreUgelloInput.style.display = 'none';
+                coloreColloInput.style.display = 'none';
+
+                // Mostra i campi in base al modello selezionato
+                if (selectedModello === 'he' || selectedModello === 'he1') {
+                    dimensioneInput.style.display = 'block';
+                    coloreUgelloInput.style.display = 'block';
+                    coloreColloInput.style.display = 'block';
+                } else if (selectedModello === 'ctm' || selectedModello === 'ctm2') {
+                    dimensioneInput.style.display = 'block';
+                    coloreUgelloInput.style.display = 'block';
+                }
+            });
+
             document.getElementById('dataForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const modello = document.getElementById('modello').value;
+                const modello = modelloSelect.value;
                 const dimensione = document.getElementById('dimensione').value;
+                const coloreUgello = document.getElementById('coloreUgello').value;
+                const coloreCollo = document.getElementById('coloreCollo').value;
 
                 try {
                     await addDoc(collection(db, 'modelli'), {
                         modello: modello,
-                        dimensione: dimensione
+                        dimensione: dimensione,
+                        coloreUgello: coloreUgello,
+                        coloreCollo: coloreCollo
                     });
                     document.getElementById('message').innerText = 'Dati inseriti con successo!';
                     document.getElementById('dataForm').reset();
@@ -44,14 +70,40 @@
             });
         });
     </script>
+    <style>
+        /* Aggiunta di stili per nascondere i campi all'inizio */
+        #dimensioneInput, #coloreUgelloInput, #coloreColloInput {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Inserisci Dati</h1>
     <form id="dataForm">
         <label for="modello">Modello:</label>
-        <input type="text" id="modello" required>
-        <label for="dimensione">Dimensione:</label>
-        <input type="text" id="dimensione" required>
+        <select id="modello" required>
+            <option value="">Seleziona un modello</option>
+            <option value="he">HE</option>
+            <option value="he1">HE 1"</option>
+            <option value="ctm">CTM</option>
+            <option value="ctm2">CTM 2.0</option>
+        </select>
+
+        <div id="dimensioneInput">
+            <label for="dimensione">Dimensione:</label>
+            <input type="text" id="dimensione" required>
+        </div>
+
+        <div id="coloreUgelloInput">
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" required>
+        </div>
+
+        <div id="coloreColloInput">
+            <label for="coloreCollo">Colore Collo:</label>
+            <input type="text" id="coloreCollo" required>
+        </div>
+
         <button type="submit">Inserisci</button>
     </form>
     <p id="message"></p>
