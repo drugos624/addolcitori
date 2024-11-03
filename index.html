@@ -4,171 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Impianti</title>
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-        // Configura il tuo progetto Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
-            authDomain: "addolcitori-2f8fe.firebaseapp.com",
-            projectId: "addolcitori-2f8fe",
-            storageBucket: "addolcitori-2f8fe.appspot.com",
-            messagingSenderId: "399702428879",
-            appId: "1:399702428879:web:4bee57dcdc3b80eea8bbba"
-        };
-
-        // Inizializza Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const dataForm = document.getElementById('dataForm');
-            const impiantoSelect = document.getElementById('impianto');
-            const dimensioneInput = document.getElementById('dimensione');
-            const coloreUgelloInput = document.getElementById('coloreUgello');
-            const dimensioneColloInput = document.getElementById('dimensioneCollo');
-            const quantitaResinaInput = document.getElementById('quantitaResina');
-            const quantitaSottolettoInput = document.getElementById('quantitaSottoletto');
-            const spazioLiberoInput = document.getElementById('spazioLibero');
-            const quantitaSabbiaInput = document.getElementById('quantitaSabbia');
-            const message = document.getElementById('message');
-
-            impiantoSelect.addEventListener('change', () => {
-                hideFields();
-                showFieldsForSelectedImpianto(impiantoSelect.value);
-            });
-
-            dataForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const modello = impiantoSelect.value;
-                const dimensione = dimensioneInput.value;
-                const coloreUgello = coloreUgelloInput.value;
-                const dimensioneCollo = dimensioneColloInput.value;
-                const quantitaResina = quantitaResinaInput.value;
-                const quantitaSottoletto = quantitaSottolettoInput.value;
-                const spazioLibero = spazioLiberoInput.value;
-                const quantitaSabbia = quantitaSabbiaInput.value;
-
-                try {
-                    // Usa il nome del modello come ID
-                    await setDoc(doc(db, 'modelli', modello), {
-                        dimensione: dimensione,
-                        coloreUgello: coloreUgello,
-                        dimensioneCollo: dimensioneCollo,
-                        quantitaResina: quantitaResina,
-                        quantitaSottoletto: quantitaSottoletto,
-                        spazioLibero: spazioLibero,
-                        quantitaSabbia: quantitaSabbia
-                    });
-                    message.innerText = 'Dati inseriti con successo!';
-                    dataForm.reset();
-                    hideFields();
-                } catch (error) {
-                    console.error("Errore durante l'inserimento dei dati: ", error);
-                    message.innerText = 'Errore durante l\'inserimento dei dati.';
-                }
-            });
-        });
-
-        function showFieldsForSelectedImpianto(impianto) {
-            const dimensioneInput = document.getElementById('dimensione');
-            const coloreUgelloInput = document.getElementById('coloreUgello');
-            const dimensioneColloInput = document.getElementById('dimensioneCollo');
-            const quantitaResinaInput = document.getElementById('quantitaResina');
-            const quantitaSottolettoInput = document.getElementById('quantitaSottoletto');
-            const spazioLiberoInput = document.getElementById('spazioLibero');
-            const quantitaSabbiaInput = document.getElementById('quantitaSabbia');
-
-            dimensioneInput.style.display = 'none';
-            coloreUgelloInput.style.display = 'none';
-            dimensioneColloInput.style.display = 'none';
-            quantitaResinaInput.style.display = 'none';
-            quantitaSottolettoInput.style.display = 'none';
-            spazioLiberoInput.style.display = 'none';
-            quantitaSabbiaInput.style.display = 'none';
-
-            if (impianto === "he 1" || impianto === "he 1,5\"") {
-                dimensioneInput.style.display = 'block';
-                coloreUgelloInput.style.display = 'block';
-                dimensioneColloInput.style.display = 'block';
-                quantitaResinaInput.style.display = 'block';
-                quantitaSottolettoInput.style.display = 'block';
-                spazioLiberoInput.style.display = 'block';
-            } else if (impianto === "ctm old" || impianto === "ctm 2.0") {
-                dimensioneInput.style.display = 'block';
-                coloreUgelloInput.style.display = 'block';
-                quantitaResinaInput.style.display = 'block';
-                quantitaSabbiaInput.style.display = 'block';
-                spazioLiberoInput.style.display = 'block';
-            }
+    <style>
+        .hidden {
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
         }
-
-        function hideFields() {
-            const dimensioneInput = document.getElementById('dimensione');
-            const coloreUgelloInput = document.getElementById('coloreUgello');
-            const dimensioneColloInput = document.getElementById('dimensioneCollo');
-            const quantitaResinaInput = document.getElementById('quantitaResina');
-            const quantitaSottolettoInput = document.getElementById('quantitaSottoletto');
-            const spazioLiberoInput = document.getElementById('spazioLibero');
-            const quantitaSabbiaInput = document.getElementById('quantitaSabbia');
-
-            dimensioneInput.style.display = 'none';
-            coloreUgelloInput.style.display = 'none';
-            dimensioneColloInput.style.display = 'none';
-            quantitaResinaInput.style.display = 'none';
-            quantitaSottolettoInput.style.display = 'none';
-            spazioLiberoInput.style.display = 'none';
-            quantitaSabbiaInput.style.display = 'none';
-        }
-    </script>
+    </style>
 </head>
 <body>
-    <h1>Gestione Impianti</h1>
-    <form id="dataForm">
+    <h1>Inserisci Dati Impianto</h1>
+    <form id="impiantoForm">
         <label for="impianto">Seleziona Impianto:</label>
-        <select id="impianto" required>
-            <option value="">-- Seleziona --</option>
-            <option value="he 1">he 1</option>
-            <option value="he 1,5">he 1,5"</option>
-            <option value="ctm old">ctm old</option>
-            <option value="ctm 2.0">ctm 2.0</option>
+        <select id="impianto" onchange="showFieldsForSelectedImpianto()">
+            <option value="">--Seleziona--</option>
+            <option value="he 1">HE 1</option>
+            <option value="he 1,5">HE 1,5"</option>
+            <option value="ctm old">CTM Old</option>
+            <option value="ctm 2.0">CTM 2.0</option>
             <option value="Ultra Line">Ultra Line</option>
             <option value="HiFlow">HiFlow</option>
         </select>
 
-        <div>
+        <div id="heFields" class="hidden">
             <label for="dimensione">Dimensione:</label>
-            <input type="text" id="dimensione" required style="display:none;">
-        </div>
-        <div>
+            <input type="text" id="dimensione" required>
+
             <label for="coloreUgello">Colore Ugello:</label>
-            <input type="text" id="coloreUgello" required style="display:none;">
-        </div>
-        <div>
+            <input type="text" id="coloreUgello" required>
+
             <label for="dimensioneCollo">Dimensione Collo:</label>
-            <input type="text" id="dimensioneCollo" required style="display:none;">
-        </div>
-        <div>
-            <label for="quantitaResina">Quantità Resina:</label>
-            <input type="number" id="quantitaResina" required style="display:none;">
-        </div>
-        <div>
+            <input type="text" id="dimensioneCollo" required>
+
+            <label for="quantitaResina">Quantità Resine:</label>
+            <input type="number" id="quantitaResina" required>
+
             <label for="quantitaSottoletto">Quantità Sottoletto:</label>
-            <input type="number" id="quantitaSottoletto" required style="display:none;">
-        </div>
-        <div>
+            <input type="number" id="quantitaSottoletto" required>
+
             <label for="spazioLibero">Spazio Libero:</label>
-            <input type="number" id="spazioLibero" required style="display:none;">
-        </div>
-        <div>
-            <label for="quantitaSabbia">Quantità Sabbia:</label>
-            <input type="number" id="quantitaSabbia" required style="display:none;">
+            <input type="number" id="spazioLibero" required>
         </div>
 
-        <button type="submit">Inserisci</button>
+        <div id="ctmFields" class="hidden">
+            <label for="dimensioneCTM">Dimensione:</label>
+            <input type="text" id="dimensioneCTM" required>
+
+            <label for="coloreUgelloCTM">Colore Ugelli:</label>
+            <input type="text" id="coloreUgelloCTM" required>
+
+            <label for="quantitaResinaCTM">Quantità Resina:</label>
+            <input type="number" id="quantitaResinaCTM" required>
+
+            <label for="quantitaSabbia">Quantità Sabbia:</label>
+            <input type="number" id="quantitaSabbia" required>
+
+            <label for="spazioLiberoCTM">Spazio Libero:</label>
+            <input type="number" id="spazioLiberoCTM" required>
+        </div>
+
+        <button type="submit">Invia</button>
     </form>
-    <p id="message"></p>
+
+    <script>
+        function showFieldsForSelectedImpianto() {
+            const impianto = document.getElementById('impianto').value;
+            const heFields = document.getElementById('heFields');
+            const ctmFields = document.getElementById('ctmFields');
+
+            // Nascondi tutti i campi inizialmente
+            heFields.classList.add('hidden');
+            ctmFields.classList.add('hidden');
+
+            // Mostra i campi in base al modello selezionato
+            if (impianto === "he 1" || impianto === "he 1,5") {
+                heFields.classList.remove('hidden');
+            } else if (impianto === "ctm old" || impianto === "ctm 2.0") {
+                ctmFields.classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('impiantoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Aggiungi qui la logica per inviare i dati al database Firestore
+            alert('Dati inviati correttamente!');
+        });
+    </script>
 </body>
 </html>
