@@ -7,7 +7,7 @@
     <script type="module">
         // Import Firebase 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         // Configura il tuo progetto Firebase
         const firebaseConfig = {
@@ -54,13 +54,16 @@
                 const coloreUgello = document.getElementById('coloreUgello').value;
                 const coloreCollo = document.getElementById('coloreCollo').value;
 
+                // Crea un oggetto dati da inserire
+                const dati = {
+                    dimensione: dimensione,
+                    coloreUgello: coloreUgello,
+                    coloreCollo: coloreCollo
+                };
+
                 try {
-                    await addDoc(collection(db, 'modelli'), {
-                        modello: modello,
-                        dimensione: dimensione,
-                        coloreUgello: coloreUgello,
-                        coloreCollo: coloreCollo
-                    });
+                    // Usa il nome del modello come ID del documento
+                    await setDoc(doc(db, 'modelli', modello), dati);
                     document.getElementById('message').innerText = 'Dati inseriti con successo!';
                     document.getElementById('dataForm').reset();
                 } catch (error) {
@@ -104,8 +107,4 @@
             <input type="text" id="coloreCollo" required>
         </div>
 
-        <button type="submit">Inserisci</button>
-    </form>
-    <p id="message"></p>
-</body>
-</html>
+        <butt
