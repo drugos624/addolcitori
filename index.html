@@ -175,8 +175,11 @@
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
+            // Crea un identificatore unico per il documento
+            const documentId = `${modello}_${dimensione}`;
+
             if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
-                db.collection("modelli").doc(modello).set({
+                db.collection("modelli").doc(documentId).set({
                     dimensione: dimensione,
                     capacitaScambio: capacitaScambio,
                     minutiAcquaSale: minutiAcquaSale,
