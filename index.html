@@ -28,13 +28,17 @@
             const dimensioneInput = document.getElementById('dimensione');
             const coloreUgelloInput = document.getElementById('coloreUgello');
             const coloreColloInput = document.getElementById('coloreCollo');
-            const coloreColloLabel = document.getElementById('coloreColloLabel'); // Aggiunto per nascondere l'etichetta
+            const coloreColloLabel = document.getElementById('coloreColloLabel');
+            const dimensioneLabel = document.getElementById('dimensioneLabel'); // Aggiunto per nascondere l'etichetta dimensione
+            const coloreUgelloLabel = document.getElementById('coloreUgelloLabel'); // Aggiunto per nascondere l'etichetta colore ugello
 
             // Nascondi i campi di input inizialmente
             dimensioneInput.style.display = 'none';
             coloreUgelloInput.style.display = 'none';
             coloreColloInput.style.display = 'none';
-            coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
+            coloreColloLabel.style.display = 'none';
+            dimensioneLabel.style.display = 'none'; // Nascondi l'etichetta della dimensione
+            coloreUgelloLabel.style.display = 'none'; // Nascondi l'etichetta del colore ugello
 
             modelloSelect.addEventListener('change', () => {
                 const selectedModello = modelloSelect.value;
@@ -43,6 +47,8 @@
                 coloreUgelloInput.style.display = 'none';
                 coloreColloInput.style.display = 'none';
                 coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
+                dimensioneLabel.style.display = 'none'; // Nascondi l'etichetta della dimensione
+                coloreUgelloLabel.style.display = 'none'; // Nascondi l'etichetta del colore ugello
 
                 // Mostra i campi in base al modello selezionato
                 if (selectedModello === 'he' || selectedModello === 'he1') {
@@ -50,6 +56,8 @@
                     coloreUgelloInput.style.display = 'block';
                     coloreColloInput.style.display = 'block';
                     coloreColloLabel.style.display = 'block'; // Mostra l'etichetta del colore collo
+                    dimensioneLabel.style.display = 'block'; // Mostra l'etichetta della dimensione
+                    coloreUgelloLabel.style.display = 'block'; // Mostra l'etichetta del colore ugello
                     coloreColloInput.required = true; // Rendi richiesto
                 } else if (selectedModello === 'ctm' || selectedModello === 'ctm2') {
                     dimensioneInput.style.display = 'block';
@@ -57,6 +65,8 @@
                     coloreColloInput.style.display = 'none'; // Nascondi il campo colore collo
                     coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
                     coloreColloInput.required = false; // Rendi facoltativo
+                    dimensioneLabel.style.display = 'block'; // Mostra l'etichetta della dimensione
+                    coloreUgelloLabel.style.display = 'block'; // Mostra l'etichetta del colore ugello
                 }
             });
 
@@ -115,12 +125,12 @@
         </select>
         
         <div>
-            <label for="dimensione">Dimensione:</label>
+            <label id="dimensioneLabel" for="dimensione" style="display:none;">Dimensione:</label>
             <input type="text" id="dimensione" required style="display:none;">
         </div>
         
         <div>
-            <label for="coloreUgello">Colore Ugello:</label>
+            <label id="coloreUgelloLabel" for="coloreUgello" style="display:none;">Colore Ugello:</label>
             <input type="text" id="coloreUgello" required style="display:none;">
         </div>
         
