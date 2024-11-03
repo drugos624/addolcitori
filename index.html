@@ -27,6 +27,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             const dataForm = document.getElementById('dataForm');
             const modelList = document.getElementById('modelList');
+            const modelloSelect = document.getElementById('modelloSelect');
+            const dimensioneSelect = document.getElementById('dimensioneSelect');
 
             // Aggiungi dati
             dataForm.addEventListener('submit', async (e) => {
@@ -54,7 +56,9 @@
             // Funzione per caricare i modelli
             async function loadModels() {
                 modelList.innerHTML = ''; // Pulisci la lista
+                modelloSelect.innerHTML = '<option value="">Seleziona Modello</option>'; // Pulisci e resetta il menu a tendina
                 const querySnapshot = await getDocs(collection(db, 'modelli'));
+                
                 querySnapshot.forEach((doc) => {
                     const model = doc.data();
                     const listItem = document.createElement('li');
@@ -73,6 +77,12 @@
                     listItem.appendChild(deleteButton);
 
                     modelList.appendChild(listItem);
+
+                    // Aggiungi opzione al menu a tendina
+                    const option = document.createElement('option');
+                    option.value = model.modello; // Imposta il valore dell'opzione
+                    option.textContent = model.modello; // Imposta il testo dell'opzione
+                    modelloSelect.appendChild(option);
                 });
             }
 
@@ -109,6 +119,12 @@
         <button type="submit">Inserisci</button>
     </form>
     <p id="message"></p>
+
+    <h2>Seleziona Modello</h2>
+    <select id="modelloSelect">
+        <option value="">Seleziona Modello</option>
+    </select>
+
     <h2>Lista Modelli</h2>
     <ul id="modelList"></ul>
 </body>
