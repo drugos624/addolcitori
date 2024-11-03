@@ -28,6 +28,7 @@
             const dimensioneInput = document.getElementById('dimensione');
             const coloreUgelloInput = document.getElementById('coloreUgello');
             const coloreColloInput = document.getElementById('coloreCollo');
+            const coloreColloLabel = document.getElementById('coloreColloLabel'); // Aggiunto per nascondere l'etichetta
 
             modelloSelect.addEventListener('change', () => {
                 const selectedModello = modelloSelect.value;
@@ -35,17 +36,20 @@
                 dimensioneInput.style.display = 'none';
                 coloreUgelloInput.style.display = 'none';
                 coloreColloInput.style.display = 'none';
+                coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
 
                 // Mostra i campi in base al modello selezionato
                 if (selectedModello === 'he' || selectedModello === 'he1') {
                     dimensioneInput.style.display = 'block';
                     coloreUgelloInput.style.display = 'block';
                     coloreColloInput.style.display = 'block';
+                    coloreColloLabel.style.display = 'block'; // Mostra l'etichetta del colore collo
                     coloreColloInput.required = true; // Rendi richiesto
                 } else if (selectedModello === 'ctm' || selectedModello === 'ctm2') {
                     dimensioneInput.style.display = 'block';
                     coloreUgelloInput.style.display = 'block';
-                    coloreColloInput.style.display = 'none';
+                    coloreColloInput.style.display = 'none'; // Nascondi il campo colore collo
+                    coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
                     coloreColloInput.required = false; // Rendi facoltativo
                 }
             });
@@ -115,7 +119,7 @@
         </div>
         
         <div>
-            <label for="coloreCollo">Colore Collo:</label>
+            <label id="coloreColloLabel" for="coloreCollo" style="display:none;">Colore Collo:</label>
             <input type="text" id="coloreCollo" required style="display:none;">
         </div>
 
