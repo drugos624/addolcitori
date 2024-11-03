@@ -83,14 +83,24 @@
         <input type="number" id="spazioLibero" required><br>
 
         <div id="coloreUgelloContainer" class="hidden">
-            <label for="coloreUgello">Colore Inserti GPM:</label>
-            <select id="coloreUgello" required>
+            <label for="coloreUgello">Colore Ugello:</label>
+            <select id="coloreUgello">
+                <option value="">-- Seleziona --</option>
+                <option value="nero">Nero</option>
+                <option value="blu">Blu</option>
+                <option value="rosso">Rosso</option>
+                <option value="verde">Verde</option>
+            </select><br>
+        </div>
+
+        <div id="coloreInsertiContainer" class="hidden">
+            <label for="coloreInserti">Colore Inserti GPM:</label>
+            <select id="coloreInserti" required>
                 <option value="">-- Seleziona --</option>
                 <option value="nero-nero-nero">Nero - Nero - Nero</option>
                 <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-tappo-rosse">Tappo - Tappo - Rosse</option>
                 <option value="tappo-tappo-verde">Tappo - Tappo - Verde</option>
-                <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-blu-blu">Tappo - Blu - Blu</option>
                 <option value="tappo-rosso-rosso">Tappo - Rosso - Rosso</option>
                 <option value="blu-blu-arancio">Blu - Blu - Arancio</option>
@@ -128,12 +138,15 @@
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
             const coloreUgelloContainer = document.getElementById('coloreUgelloContainer');
+            const coloreInsertiContainer = document.getElementById('coloreInsertiContainer');
 
             // Mostra il form e i campi aggiuntivi in base al modello selezionato
             form.classList.remove('hidden');
             if (modello === "ctm old" || modello === "ctm 2.0") {
+                coloreInsertiContainer.classList.remove('hidden');
                 coloreUgelloContainer.classList.remove('hidden');
             } else {
+                coloreInsertiContainer.classList.add('hidden');
                 coloreUgelloContainer.classList.add('hidden');
             }
         }
@@ -144,15 +157,19 @@
             const quantitaResina = document.getElementById('quantitaResina').value;
             const quantitaSabbia = document.getElementById('quantitaSabbia').value;
             const coloreUgello = document.getElementById('coloreUgello').value;
+            const coloreInserti = document.getElementById('coloreInserti').value;
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
-            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
+            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo &&
+                (coloreInserti || modello === "he 1" || modello === "he 1.5")) {
+                
                 db.collection("modelli").doc(modello).set({
                     dimensione: dimensione,
                     quantitaResina: quantitaResina,
                     quantitaSabbia: quantitaSabbia,
                     coloreUgello: coloreUgello,
+                    coloreInserti: coloreInserti,
                     dimensioneCollo: dimensioneCollo,
                     spazioLibero: spazioLibero
                 })
