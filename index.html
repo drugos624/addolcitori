@@ -84,14 +84,19 @@
 
         <div id="coloreUgelloContainer" class="hidden">
             <label for="coloreUgello">Colore Ugello:</label>
-            <select id="coloreUgello">
+            <select id="coloreUgello" required>
                 <option value="">-- Seleziona --</option>
-                <option value="nero">Nero</option>
-                <option value="blu">Blu</option>
-                <option value="rosso">Rosso</option>
-                <option value="verde">Verde</option>
+                <option value="Nero">Nero</option>
+                <option value="Viola">Viola</option>
+                <option value="Rosso">Rosso</option>
+                <option value="Bianco">Bianco</option>
+                <option value="Blu">Blu</option>
+                <option value="Beige">Beige</option>
             </select><br>
         </div>
+
+        <label for="dimensioneCollo">Dimensione Collo:</label>
+        <input type="text" id="dimensioneCollo" required><br>
 
         <div id="coloreInsertiContainer" class="hidden">
             <label for="coloreInserti">Colore Inserti GPM:</label>
@@ -101,15 +106,13 @@
                 <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-tappo-rosse">Tappo - Tappo - Rosse</option>
                 <option value="tappo-tappo-verde">Tappo - Tappo - Verde</option>
+                <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-blu-blu">Tappo - Blu - Blu</option>
                 <option value="tappo-rosso-rosso">Tappo - Rosso - Rosso</option>
                 <option value="blu-blu-arancio">Blu - Blu - Arancio</option>
                 <option value="arancio-arancio-arancio">Arancio - Arancio - Arancio</option>
             </select><br>
         </div>
-
-        <label for="dimensioneCollo">Dimensione Collo:</label>
-        <input type="text" id="dimensioneCollo" required><br>
 
         <button type="button" onclick="inviaDati()">Invia</button>
     </form>
@@ -142,12 +145,11 @@
 
             // Mostra il form e i campi aggiuntivi in base al modello selezionato
             form.classList.remove('hidden');
+            coloreUgelloContainer.classList.remove('hidden');
             if (modello === "ctm old" || modello === "ctm 2.0") {
                 coloreInsertiContainer.classList.remove('hidden');
-                coloreUgelloContainer.classList.remove('hidden');
             } else {
                 coloreInsertiContainer.classList.add('hidden');
-                coloreUgelloContainer.classList.add('hidden');
             }
         }
 
@@ -161,9 +163,7 @@
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
-            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo &&
-                (coloreInserti || modello === "he 1" || modello === "he 1.5")) {
-                
+            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
                 db.collection("modelli").doc(modello).set({
                     dimensione: dimensione,
                     quantitaResina: quantitaResina,
