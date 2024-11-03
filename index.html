@@ -73,6 +73,15 @@
         <label for="dimensione">Dimensione:</label>
         <input type="text" id="dimensione" required><br>
 
+        <label for="capacitaScambio">Capacità Scambio:</label>
+        <input type="number" id="capacitaScambio" required><br>
+
+        <label for="minutiAcquaSale">Minuti Acqua al Sale:</label>
+        <input type="number" id="minutiAcquaSale" required><br>
+
+        <label for="quantitaSale">Quantità Sale:</label>
+        <input type="number" id="quantitaSale" required><br>
+
         <label for="quantitaResina">Quantità Resina:</label>
         <input type="number" id="quantitaResina" required><br>
 
@@ -156,6 +165,9 @@
         function inviaDati() {
             const modello = document.getElementById('modello').value;
             const dimensione = document.getElementById('dimensione').value;
+            const capacitaScambio = document.getElementById('capacitaScambio').value;
+            const minutiAcquaSale = document.getElementById('minutiAcquaSale').value;
+            const quantitaSale = document.getElementById('quantitaSale').value;
             const quantitaResina = document.getElementById('quantitaResina').value;
             const quantitaSabbia = document.getElementById('quantitaSabbia').value;
             const coloreUgello = document.getElementById('coloreUgello').value;
@@ -163,9 +175,12 @@
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
-            if (modello && dimensione && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
+            if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
                 db.collection("modelli").doc(modello).set({
                     dimensione: dimensione,
+                    capacitaScambio: capacitaScambio,
+                    minutiAcquaSale: minutiAcquaSale,
+                    quantitaSale: quantitaSale,
                     quantitaResina: quantitaResina,
                     quantitaSabbia: quantitaSabbia,
                     coloreUgello: coloreUgello,
@@ -180,7 +195,7 @@
                     console.error("Errore durante l'invio dei dati: ", error);
                 });
             } else {
-                alert("Compila tutti i campi richiesti.");
+                alert("Per favore, compila tutti i campi richiesti.");
             }
         }
     </script>
