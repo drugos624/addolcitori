@@ -115,7 +115,6 @@
                 <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-tappo-rosse">Tappo - Tappo - Rosse</option>
                 <option value="tappo-tappo-verde">Tappo - Tappo - Verde</option>
-                <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
                 <option value="tappo-blu-blu">Tappo - Blu - Blu</option>
                 <option value="tappo-rosso-rosso">Tappo - Rosso - Rosso</option>
                 <option value="blu-blu-arancio">Blu - Blu - Arancio</option>
@@ -175,32 +174,51 @@
             const dimensioneCollo = document.getElementById('dimensioneCollo').value;
             const spazioLibero = document.getElementById('spazioLibero').value;
 
-            // Crea un identificatore unico per il documento
-            const documentId = `${modello}_${dimensione}`;
-
+            // Verifica se tutti i campi sono compilati
             if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
-                db.collection("modelli").doc(documentId).set({
-                    dimensione: dimensione,
+                
+                // Aggiungi i dati alla struttura di Firebase
+                db.collection("modelli").doc(modello).collection("dimensioni").doc(dimensione).set({
                     capacitaScambio: capacitaScambio,
                     minutiAcquaSale: minutiAcquaSale,
                     quantitaSale: quantitaSale,
                     quantitaResina: quantitaResina,
                     quantitaSabbia: quantitaSabbia,
                     coloreUgello: coloreUgello,
-                    coloreInserti: coloreInserti,
+                    
+                                      coloreInserti: coloreInserti,
                     dimensioneCollo: dimensioneCollo,
                     spazioLibero: spazioLibero
                 })
                 .then(() => {
                     alert("Dati inviati con successo!");
+                    // Resetta il modulo dopo l'invio
+                    resetForm();
                 })
                 .catch((error) => {
                     console.error("Errore durante l'invio dei dati: ", error);
+                    alert("Si è verificato un errore durante l'invio dei dati.");
                 });
             } else {
-                alert("Per favore, compila tutti i campi richiesti.");
+                alert("Per favore, compila tutti i campi obbligatori.");
             }
+        }
+
+        function resetForm() {
+            document.getElementById('modello').value = "";
+            document.getElementById('dimensione').value = "";
+            document.getElementById('capacitaScambio').value = "";
+            document.getElementById('minutiAcquaSale').value = "";
+            document.getElementById('quantitaSale').value = "";
+            document.getElementById('quantitaResina').value = "";
+            document.getElementById('quantitaSabbia').value = "";
+            document.getElementById('dimensioneCollo').value = "";
+            document.getElementById('spazioLibero').value = "";
+            document.getElementById('coloreUgello').value = "";
+            document.getElementById('coloreInserti').value = "";
+            document.getElementById('modelloForm').classList.add('hidden');
         }
     </script>
 </body>
 </html>
+
