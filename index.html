@@ -30,6 +30,12 @@
             const coloreColloInput = document.getElementById('coloreCollo');
             const coloreColloLabel = document.getElementById('coloreColloLabel'); // Aggiunto per nascondere l'etichetta
 
+            // Nascondi i campi di input inizialmente
+            dimensioneInput.style.display = 'none';
+            coloreUgelloInput.style.display = 'none';
+            coloreColloInput.style.display = 'none';
+            coloreColloLabel.style.display = 'none'; // Nascondi l'etichetta del colore collo
+
             modelloSelect.addEventListener('change', () => {
                 const selectedModello = modelloSelect.value;
                 // Nascondi tutti i campi
