@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleziona Modello</title>
-    <style> 
+    <style>
         body {
             display: flex;
             flex-direction: column;
@@ -65,7 +65,6 @@
         <option value="">-- Seleziona --</option>
         <option value="he 1">HE 1</option>
         <option value="he 1.5">HE 1.5</option>
-        <option value="ctm">CTM</option> <!-- Aggiunto il modello CTM -->
         <option value="ctm old">Ctm Old</option> <!-- Aggiunto il modello Ctm Old -->
         <option value="ctm 2.0">Ctm 2.0</option> <!-- Aggiunto il modello Ctm 2.0 -->
     </select>
@@ -127,8 +126,8 @@
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
 
-            // Mostra il form solo se il modello selezionato è CTM, Ctm Old o Ctm 2.0
-            if (modello === "ctm" || modello === "ctm old" || modello === "ctm 2.0") {
+            // Mostra il form solo se il modello selezionato è Ctm Old o Ctm 2.0
+            if (modello === "ctm old" || modello === "ctm 2.0") {
                 form.classList.remove('hidden');
             } else {
                 form.classList.add('hidden');
