@@ -49,7 +49,7 @@
 
             document.getElementById('dataForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const modello = modelloSelect.value;
+                const modello = modelloSelect.value; // Questo rappresenta il nome del modello selezionato
                 const dimensione = document.getElementById('dimensione').value;
                 const coloreUgello = document.getElementById('coloreUgello').value;
                 const coloreCollo = document.getElementById('coloreCollo').value;
@@ -63,7 +63,7 @@
 
                 try {
                     // Usa il nome del modello come ID del documento
-                    await setDoc(doc(db, 'modelli', modello), dati);
+                    await setDoc(doc(db, 'modelli', modello), dati); // 'modelli' è la tua collezione e 'modello' è la chiave del documento
                     document.getElementById('message').innerText = 'Dati inseriti con successo!';
                     document.getElementById('dataForm').reset();
                 } catch (error) {
