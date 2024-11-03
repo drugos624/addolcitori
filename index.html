@@ -161,48 +161,48 @@
             }
         }
 
-        function inviaDati() {
-            const modello = document.getElementById('modello').value;
-            const dimensione = document.getElementById('dimensione').value;
-            const capacitaScambio = document.getElementById('capacitaScambio').value;
-            const minutiAcquaSale = document.getElementById('minutiAcquaSale').value;
-            const quantitaSale = document.getElementById('quantitaSale').value;
-            const quantitaResina = document.getElementById('quantitaResina').value;
-            const quantitaSabbia = document.getElementById('quantitaSabbia').value;
-            const coloreUgello = document.getElementById('coloreUgello').value;
-            const coloreInserti = document.getElementById('coloreInserti').value;
-            const dimensioneCollo = document.getElementById('dimensioneCollo').value;
-            const spazioLibero = document.getElementById('spazioLibero').value;
+      function inviaDati() {
+    const modello = document.getElementById('modello').value;
+    const dimensione = document.getElementById('dimensione').value;
+    const capacitaScambio = document.getElementById('capacitaScambio').value;
+    const minutiAcquaSale = document.getElementById('minutiAcquaSale').value;
+    const quantitaSale = document.getElementById('quantitaSale').value;
+    const quantitaResina = document.getElementById('quantitaResina').value;
+    const quantitaSabbia = document.getElementById('quantitaSabbia').value;
+    const coloreUgello = document.getElementById('coloreUgello').value;
+    const coloreInserti = document.getElementById('coloreInserti').value;
+    const dimensioneCollo = document.getElementById('dimensioneCollo').value;
+    const spazioLibero = document.getElementById('spazioLibero').value;
 
-            // Verifica se tutti i campi sono compilati
-            if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
-                
-                // Aggiungi i dati alla struttura di Firebase
-                db.collection("modelli").doc(modello).collection("dimensioni").doc(dimensione).set({
-                    capacitaScambio: capacitaScambio,
-                    minutiAcquaSale: minutiAcquaSale,
-                    quantitaSale: quantitaSale,
-                    quantitaResina: quantitaResina,
-                    quantitaSabbia: quantitaSabbia,
-                    coloreUgello: coloreUgello,
-                    
-                                      coloreInserti: coloreInserti,
-                    dimensioneCollo: dimensioneCollo,
-                    spazioLibero: spazioLibero
-                })
-                .then(() => {
-                    alert("Dati inviati con successo!");
-                    // Resetta il modulo dopo l'invio
-                    resetForm();
-                })
-                .catch((error) => {
-                    console.error("Errore durante l'invio dei dati: ", error);
-                    alert("Si è verificato un errore durante l'invio dei dati.");
-                });
-            } else {
-                alert("Per favore, compila tutti i campi obbligatori.");
-            }
-        }
+    // Verifica se tutti i campi sono compilati
+    if (modello && dimensione && capacitaScambio && minutiAcquaSale && quantitaSale && quantitaResina && quantitaSabbia && spazioLibero && dimensioneCollo && (coloreUgello || modello === "he 1" || modello === "he 1.5")) {
+        
+        // Aggiungi i dati alla struttura di Firebase
+        db.collection("Addolcitori").doc(modello).collection("dimensioni").doc(dimensione).set({
+            capacitaScambio: parseInt(capacitaScambio), // Converti in numero se necessario
+            minutiAcquaSale: parseInt(minutiAcquaSale),
+            quantitaSale: parseInt(quantitaSale),
+            quantitaResina: parseInt(quantitaResina),
+            quantitaSabbia: parseInt(quantitaSabbia),
+            coloreUgello: coloreUgello,
+            coloreInserti: coloreInserti,
+            dimensioneCollo: dimensioneCollo,
+            spazioLibero: parseInt(spazioLibero) // Converti in numero se necessario
+        })
+        .then(() => {
+            alert("Dati inviati con successo!");
+            // Resetta il modulo dopo l'invio
+            resetForm();
+        })
+        .catch((error) => {
+            console.error("Errore durante l'invio dei dati: ", error);
+            alert("Si è verificato un errore durante l'invio dei dati.");
+        });
+    } else {
+        alert("Per favore, compila tutti i campi obbligatori.");
+    }
+}
+
 
         function resetForm() {
             document.getElementById('modello').value = "";
