@@ -73,7 +73,7 @@
                 const dati = {
                     dimensione: dimensione,
                     coloreUgello: coloreUgello,
-                    coloreCollo: coloreCollo || null // Aggiungi solo se esiste
+                    coloreCollo: (modello === 'he' || modello === 'he1') ? coloreCollo : null // Aggiungi solo se esiste
                 };
 
                 try {
