@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inserisci Dati</title>
+    <title>Gestione Modelli</title>
     <script type="module">
         // Import Firebase 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, setDoc, doc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         // Configura il tuo progetto Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
             authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "addolcitori-2f8fe",
             storageBucket: "addolcitori-2f8fe.firebasestorage.app",
             messagingSenderId: "399702428879",
@@ -24,127 +25,91 @@
         const db = getFirestore(app);
 
         document.addEventListener('DOMContentLoaded', () => {
-            const modelloSelect = document.getElementById('modello');
-            const dimensioneInput = document.getElementById('dimensione');
-            const coloreUgelloInput = document.getElementById('coloreUgello');
-            const coloreColloInput = document.getElementById('coloreCollo');
-            const coloreColloLabel = document.getElementById('coloreColloLabel');
-            const dimensioneLabel = document.getElementById('dimensioneLabel');
-            const coloreUgelloLabel = document.getElementById('coloreUgelloLabel');
+            const dataForm = document.getElementById('dataForm');
+            const modelList = document.getElementById('modelList');
 
-            // Nascondi i campi di input inizialmente
-            dimensioneInput.style.display = 'none';
-            coloreUgelloInput.style.display = 'none';
-            coloreColloInput.style.display = 'none';
-            coloreColloLabel.style.display = 'none';
-            dimensioneLabel.style.display = 'none';
-            coloreUgelloLabel.style.display = 'none';
-
-            modelloSelect.addEventListener('change', () => {
-                const selectedModello = modelloSelect.value;
-                dimensioneInput.style.display = 'none';
-                coloreUgelloInput.style.display = 'none';
-                coloreColloInput.style.display = 'none';
-                coloreColloLabel.style.display = 'none';
-                dimensioneLabel.style.display = 'none';
-                coloreUgelloLabel.style.display = 'none';
-
-                if (selectedModello === 'he' || selectedModello === 'he1') {
-                    dimensioneInput.style.display = 'block';
-                    coloreUgelloInput.style.display = 'block';
-                    coloreColloInput.style.display = 'block';
-                    coloreColloLabel.style.display = 'block';
-                    dimensioneLabel.style.display = 'block';
-                    coloreUgelloLabel.style.display = 'block';
-                    coloreColloInput.required = true;
-                } else if (selectedModello === 'ctm' || selectedModello === 'ctm2') {
-                    dimensioneInput.style.display = 'block';
-                    coloreUgelloInput.style.display = 'block';
-                    coloreColloInput.style.display = 'none';
-                    coloreColloLabel.style.display = 'none';
-                    coloreColloInput.required = false;
-                    dimensioneLabel.style.display = 'block';
-                    coloreUgelloLabel.style.display = 'block';
-                }
-            });
-
-            document.getElementById('dataForm').addEventListener('submit', async (e) => {
+            // Aggiungi dati
+            dataForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const modello = modelloSelect.value;
+                const modello = document.getElementById('modello').value;
                 const dimensione = document.getElementById('dimensione').value;
-                const coloreUgello = document.getElementById('coloreUgello').value;
-                const coloreCollo = document.getElementById('coloreCollo').value;
-
-                if (!modello) {
-                    document.getElementById('message').innerText = 'Seleziona un modello!';
-                    return;
-                }
-
-                // Controlla la visibilità e la validità dei campi
-                if ((modello === 'he' || modello === 'he1') && (!dimensione || !coloreUgello || !coloreCollo)) {
-                    document.getElementById('message').innerText = 'Compila tutti i campi richiesti!';
-                    return;
-                } else if ((modello === 'ctm' || modello === 'ctm2') && (!dimensione || !coloreUgello)) {
-                    document.getElementById('message').innerText = 'Compila tutti i campi richiesti!';
-                    return;
-                }
-
-                // Controlla se il modello con la dimensione esiste già nel database
-                const q = query(collection(db, 'modelli'), where('dimensione', '==', dimensione), where('coloreUgello', '==', coloreUgello));
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    alert('Attenzione: impianto già inserito!');
-                    return;
-                }
-
-                const dati = {
-                    dimensione: dimensione,
-                    coloreUgello: coloreUgello,
-                    coloreCollo: (modello === 'he' || modello === 'he1') ? coloreCollo : null
-                };
 
                 try {
-                    await setDoc(doc(db, 'modelli', modello), dati);
+                    await addDoc(collection(db, 'modelli'), {
+                        modello: modello,
+                        dimensione: dimensione
+                    });
                     document.getElementById('message').innerText = 'Dati inseriti con successo!';
-                    document.getElementById('dataForm').reset();
+                    dataForm.reset();
+                    loadModels(); // Ricarica la lista dopo l'inserimento
                 } catch (error) {
                     console.error("Errore durante l'inserimento dei dati: ", error);
                     document.getElementById('message').innerText = 'Errore durante l\'inserimento dei dati.';
                 }
             });
+
+            // Carica tutti i modelli
+            loadModels();
+
+            // Funzione per caricare i modelli
+            async function loadModels() {
+                modelList.innerHTML = ''; // Pulisci la lista
+                const querySnapshot = await getDocs(collection(db, 'modelli'));
+                querySnapshot.forEach((doc) => {
+                    const model = doc.data();
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${model.modello} - ${model.dimensione}`;
+                    
+                    // Pulsante di modifica
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Modifica';
+                    editButton.onclick = () => editModel(doc.id, model);
+                    listItem.appendChild(editButton);
+
+                    // Pulsante di eliminazione
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Elimina';
+                    deleteButton.onclick = () => deleteModel(doc.id);
+                    listItem.appendChild(deleteButton);
+
+                    modelList.appendChild(listItem);
+                });
+            }
+
+            // Funzione per modificare un modello
+            async function editModel(id, model) {
+                const newDimension = prompt("Nuova dimensione:", model.dimensione);
+                if (newDimension) {
+                    const modelRef = doc(db, 'modelli', id);
+                    await updateDoc(modelRef, {
+                        dimensione: newDimension
+                    });
+                    loadModels(); // Ricarica la lista dopo la modifica
+                }
+            }
+
+            // Funzione per eliminare un modello
+            async function deleteModel(id) {
+                const confirmation = confirm("Sei sicuro di voler eliminare questo modello?");
+                if (confirmation) {
+                    await deleteDoc(doc(db, 'modelli', id));
+                    loadModels(); // Ricarica la lista dopo l'eliminazione
+                }
+            }
         });
     </script>
 </head>
 <body>
-    <h1>Inserisci Dati</h1>
+    <h1>Gestione Modelli</h1>
     <form id="dataForm">
         <label for="modello">Modello:</label>
-        <select id="modello" required>
-            <option value="">Seleziona un modello</option>
-            <option value="he">HE</option>
-            <option value="he1">HE 1"</option>
-            <option value="ctm">CTM</option>
-            <option value="ctm2">CTM 2.0</option>
-        </select>
-        
-        <div>
-            <label id="dimensioneLabel" for="dimensione" style="display:none;">Dimensione:</label>
-            <input type="text" id="dimensione" required style="display:none;">
-        </div>
-        
-        <div>
-            <label id="coloreUgelloLabel" for="coloreUgello" style="display:none;">Colore Ugello:</label>
-            <input type="text" id="coloreUgello" required style="display:none;">
-        </div>
-        
-        <div>
-            <label id="coloreColloLabel" for="coloreCollo" style="display:none;">Colore Collo:</label>
-            <input type="text" id="coloreCollo" required style="display:none;">
-        </div>
-
+        <input type="text" id="modello" required>
+        <label for="dimensione">Dimensione:</label>
+        <input type="text" id="dimensione" required>
         <button type="submit">Inserisci</button>
     </form>
     <p id="message"></p>
+    <h2>Lista Modelli</h2>
+    <ul id="modelList"></ul>
 </body>
 </html>
