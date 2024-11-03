@@ -82,19 +82,21 @@
         <label for="spazioLibero">Spazio Libero:</label>
         <input type="number" id="spazioLibero" required><br>
 
-        <label for="coloreUgello">Colore Inserti GPM:</label>
-        <select id="coloreUgello" required>
-            <option value="">-- Seleziona --</option>
-            <option value="nero-nero-nero">Nero - Nero - Nero</option>
-            <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
-            <option value="tappo-tappo-rosse">Tappo - Tappo - Rosse</option>
-            <option value="tappo-tappo-verde">Tappo - Tappo - Verde</option>
-            <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
-            <option value="tappo-blu-blu">Tappo - Blu - Blu</option>
-            <option value="tappo-rosso-rosso">Tappo - Rosso - Rosso</option>
-            <option value="blu-blu-arancio">Blu - Blu - Arancio</option>
-            <option value="arancio-arancio-arancio">Arancio - Arancio - Arancio</option>
-        </select><br>
+        <div id="coloreUgelloContainer" class="hidden">
+            <label for="coloreUgello">Colore Inserti GPM:</label>
+            <select id="coloreUgello" required>
+                <option value="">-- Seleziona --</option>
+                <option value="nero-nero-nero">Nero - Nero - Nero</option>
+                <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
+                <option value="tappo-tappo-rosse">Tappo - Tappo - Rosse</option>
+                <option value="tappo-tappo-verde">Tappo - Tappo - Verde</option>
+                <option value="tappo-tappo-blu">Tappo - Tappo - Blu</option>
+                <option value="tappo-blu-blu">Tappo - Blu - Blu</option>
+                <option value="tappo-rosso-rosso">Tappo - Rosso - Rosso</option>
+                <option value="blu-blu-arancio">Blu - Blu - Arancio</option>
+                <option value="arancio-arancio-arancio">Arancio - Arancio - Arancio</option>
+            </select><br>
+        </div>
 
         <label for="dimensioneCollo">Dimensione Collo:</label>
         <input type="text" id="dimensioneCollo" required><br>
@@ -125,17 +127,14 @@
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
-            const coloreUgello = document.getElementById('coloreUgello');
+            const coloreUgelloContainer = document.getElementById('coloreUgelloContainer');
 
             // Mostra il form e i campi aggiuntivi in base al modello selezionato
-            if (modello === "he 1" || modello === "he 1.5") {
-                form.classList.remove('hidden');
-                coloreUgello.parentElement.classList.add('hidden');
-            } else if (modello === "ctm old" || modello === "ctm 2.0") {
-                form.classList.remove('hidden');
-                coloreUgello.parentElement.classList.remove('hidden');
+            form.classList.remove('hidden');
+            if (modello === "ctm old" || modello === "ctm 2.0") {
+                coloreUgelloContainer.classList.remove('hidden');
             } else {
-                form.classList.add('hidden');
+                coloreUgelloContainer.classList.add('hidden');
             }
         }
 
