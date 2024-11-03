@@ -31,6 +31,9 @@
         <label for="numeroCollo">Numero Collo:</label>
         <input type="text" id="numeroCollo" required><br>
 
+        <label for="spazioLibero">Spazio Libero:</label>
+        <input type="number" id="spazioLibero" required><br>
+
         <button type="button" onclick="inviaDati()">Invia</button>
     </form>
 
@@ -40,15 +43,15 @@
 
     <script>
         // Configurazione di Firebase
-       const firebaseConfig = {
-  apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
-  authDomain: "addolcitori-2f8fe.firebaseapp.com",
-  databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "addolcitori-2f8fe",
-  storageBucket: "addolcitori-2f8fe.firebasestorage.app",
-  messagingSenderId: "399702428879",
-  appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
+            authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "addolcitori-2f8fe",
+            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+            messagingSenderId: "399702428879",
+            appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
+        };
 
         // Inizializza Firebase
         firebase.initializeApp(firebaseConfig);
@@ -72,14 +75,16 @@
             const quantitaSabbia = document.getElementById('quantitaSabbia').value;
             const coloreUgello = document.getElementById('coloreUgello').value;
             const numeroCollo = document.getElementById('numeroCollo').value;
+            const spazioLibero = document.getElementById('spazioLibero').value;
 
-            if (modello && dimensione && quantitaResina && quantitaSabbia && coloreUgello && numeroCollo) {
+            if (modello && dimensione && quantitaResina && quantitaSabbia && coloreUgello && numeroCollo && spazioLibero) {
                 db.collection("modelli").doc(modello).set({
                     dimensione: dimensione,
                     quantitaResina: quantitaResina,
                     quantitaSabbia: quantitaSabbia,
                     coloreUgello: coloreUgello,
-                    numeroCollo: numeroCollo
+                    numeroCollo: numeroCollo,
+                    spazioLibero: spazioLibero
                 })
                 .then(() => {
                     alert("Dati inviati con successo!");
