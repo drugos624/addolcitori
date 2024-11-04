@@ -1,95 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seleziona Modello</title>
+    <title>Gestione Modelli Addolcitori</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Seleziona Modello</h1>
-    <label for="modello">Modello:</label>
-    <select id="modello" onchange="showFields()">
-        <option value="">-- Seleziona --</option>
-        <option value="he 1">HE 1</option>
-        <option value="he 1.5">HE 1.5</option>
-    </select>
+    <h1>Gestione Modelli Addolcitori</h1>
+    
+    <div class="form-group">
+        <label for="modello">Modello:</label>
+        <select id="modello" onchange="showFields()">
+            <option value="">-- Seleziona --</option>
+            <option value="he 1">HE 1</option>
+            <option value="he 1.5">HE 1.5</option>
+        </select>
+    </div>
 
     <form id="modelloForm" class="hidden">
-        <label for="dimensione">Dimensione:</label>
-        <input type="text" id="dimensione" required><br>
+        <div class="form-group">
+            <label for="dimensione">Dimensione:</label>
+            <input type="text" id="dimensione" required>
+            <div id="dimensione-error" class="error"></div>
+        </div>
 
-        <label for="quantitaResina">Quantità Resina:</label>
-        <input type="number" id="quantitaResina" required><br>
+        <div class="form-group">
+            <label for="quantitaResina">Quantità Resina (L):</label>
+            <input type="number" id="quantitaResina" min="0" step="0.1" required>
+            <div id="resina-error" class="error"></div>
+        </div>
 
-        <label for="quantitaSabbia">Quantità Sabbia:</label>
-        <input type="number" id="quantitaSabbia" required><br>
+        <div class="form-group">
+            <label for="quantitaSabbia">Quantità Sabbia (Kg):</label>
+            <input type="number" id="quantitaSabbia" min="0" step="0.1" required>
+            <div id="sabbia-error" class="error"></div>
+        </div>
 
-        <label for="coloreUgello">Colore Ugello:</label>
-        <input type="text" id="coloreUgello" required><br>
+        <div class="form-group">
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" required>
+            <div id="ugello-error" class="error"></div>
+        </div>
 
-        <label for="numeroCollo">Numero Collo:</label>
-        <input type="text" id="numeroCollo" required><br>
+        <div class="form-group">
+            <label for="numeroCollo">Numero Collo:</label>
+            <input type="text" id="numeroCollo" required>
+            <div id="collo-error" class="error"></div>
+        </div>
 
-        <button type="button" onclick="inviaDati()">Invia</button>
+        <button type="button" onclick="inviaDati()">Salva Dati</button>
     </form>
 
-    <!-- Inclusione di Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
-
+    
     <script>
-        // Configurazione di Firebase
-       const firebaseConfig = {
-  apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
-  authDomain: "addolcitori-2f8fe.firebaseapp.com",
-  databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "addolcitori-2f8fe",
-  storageBucket: "addolcitori-2f8fe.firebasestorage.app",
-  messagingSenderId: "399702428879",
-  appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
+            authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "addolcitori-2f8fe",
+            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+            messagingSenderId: "399702428879",
+            appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
+        };
 
-        // Inizializza Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
-
             if (modello) {
                 form.classList.remove('hidden');
+                // Carica i dati esistenti se disponibili
+                caricaDatiModello(modello);
             } else {
                 form.classList.add('hidden');
             }
         }
 
-        function inviaDati() {
-            const modello = document.getElementById('modello').value;
-            const dimensione = document.getElementById('dimensione').value;
-            const quantitaResina = document.getElementById('quantitaResina').value;
-            const quantitaSabbia = document.getElementById('quantitaSabbia').value;
-            const coloreUgello = document.getElementById('coloreUgello').value;
-            const numeroCollo = document.getElementById('numeroCollo').value;
-
-            if (modello && dimensione && quantitaResina && quantitaSabbia && coloreUgello && numeroCollo) {
-                db.collection("modelli").doc(modello).set({
-                    dimensione: dimensione,
-                    quantitaResina: quantitaResina,
-                    quantitaSabbia: quantitaSabbia,
-                    coloreUgello: coloreUgello,
-                    numeroCollo: numeroCollo
-                })
-                .then(() => {
-                    alert("Dati inviati con successo!");
+        function caricaDatiModello(modello) {
+            db.collection("modelli").doc(modello).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('dimensione').value = data.dimensione || '';
+                        document.getElementById('quantitaResina').value = data.quantitaResina || '';
+                        document.getElementById('quantitaSabbia').value = data.quantitaSabbia || '';
+                        document.getElementById('coloreUgello').value = data.coloreUgello || '';
+                        document.getElementById('numeroCollo').value = data.numeroCollo || '';
+                    }
                 })
                 .catch((error) => {
-                    console.error("Errore durante l'invio dei dati: ", error);
+                    console.error("Errore nel caricamento dei dati: ", error);
                 });
-            } else {
-                alert("Compila tutti i campi richiesti.");
+        }
+
+        function validateForm() {
+            let isValid = true;
+            // Reset previous errors
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            const validations = {
+                'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
+                'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'coloreUgello': (value) => value.trim() !== '' || 'Inserire un colore valido',
+                'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
+            };
+
+            Object.entries(validations).forEach(([field, validator]) => {
+                const value = document.getElementById(field).value;
+                const errorMessage = validator(value);
+                if (errorMessage !== true) {
+                    document.getElementById(`${field}-error`).textContent = errorMessage;
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function inviaDati() {
+            if (!validateForm()) {
+                return;
             }
+
+            const modello = document.getElementById('modello').value;
+            const dati = {
+                dimensione: document.getElementById('dimensione').value,
+                quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
+                quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
+                coloreUgello: document.getElementById('coloreUgello').value,
+                numeroCollo: document.getElementById('numeroCollo').value,
+                dataModifica: new Date().toISOString()
+            };
+
+            db.collection("modelli").doc(modello).set(dati)
+                .then(() => {
+                    alert("Dati salvati con successo!");
+                })
+                .catch((error) => {
+                    alert("Errore durante il salvataggio: " + error.message);
+                    console.error("Errore durante il salvataggio: ", error);
+                });
         }
     </script>
 </body>
