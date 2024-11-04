@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
@@ -34,6 +34,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-right: 1rem;
         }
         button:hover {
             background-color: #45a049;
@@ -47,6 +48,25 @@
             margin-top: -0.5rem;
             margin-bottom: 1rem;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #ff4444;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +76,10 @@
         <label for="modello">Modello:</label>
         <select id="modello" onchange="showFields()">
             <option value="">-- Seleziona --</option>
-            <option value="he 1">HE 1</option>
-            <option value="he 1.5">HE 1.5</option>
+            <option value="ctm old">CTM Old</option>
+            <option value="ctm 2.0">CTM 2.0</option>
+            <option value="he 1">HE 1"</option>
+            <option value="he 1.5">HE 1.5"</option>
         </select>
     </div>
 
@@ -95,6 +117,23 @@
         <button type="button" onclick="inviaDati()">Salva Dati</button>
     </form>
 
+    <div id="tabellaContainer" class="hidden">
+        <h2>Configurazioni Esistenti</h2>
+        <table id="tabellaConfigurazioni">
+            <thead>
+                <tr>
+                    <th>Dimensione</th>
+                    <th>Resina (L)</th>
+                    <th>Sabbia (Kg)</th>
+                    <th>Colore Ugello</th>
+                    <th>Numero Collo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
     
@@ -115,35 +154,60 @@
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
+            const tabellaContainer = document.getElementById('tabellaContainer');
             if (modello) {
                 form.classList.remove('hidden');
-                // Carica i dati esistenti se disponibili
-                caricaDatiModello(modello);
+                tabellaContainer.classList.remove('hidden');
+                caricaConfigurazioni(modello);
+                resetForm();
             } else {
                 form.classList.add('hidden');
+                tabellaContainer.classList.add('hidden');
             }
         }
 
-        function caricaDatiModello(modello) {
-            db.collection("modelli").doc(modello).get()
-                .then((doc) => {
-                    if (doc.exists) {
+        function resetForm() {
+            document.getElementById('dimensione').value = '';
+            document.getElementById('quantitaResina').value = '';
+            document.getElementById('quantitaSabbia').value = '';
+            document.getElementById('coloreUgello').value = '';
+            document.getElementById('numeroCollo').value = '';
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+        }
+
+        function caricaConfigurazioni(modello) {
+            const tbody = document.querySelector('#tabellaConfigurazioni tbody');
+            tbody.innerHTML = '';
+
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
                         const data = doc.data();
-                        document.getElementById('dimensione').value = data.dimensione || '';
-                        document.getElementById('quantitaResina').value = data.quantitaResina || '';
-                        document.getElementById('quantitaSabbia').value = data.quantitaSabbia || '';
-                        document.getElementById('coloreUgello').value = data.coloreUgello || '';
-                        document.getElementById('numeroCollo').value = data.numeroCollo || '';
-                    }
+                        const row = tbody.insertRow();
+                        row.innerHTML = `
+                            <td>${data.dimensione}</td>
+                            <td>${data.quantitaResina}</td>
+                            <td>${data.quantitaSabbia}</td>
+                            <td>${data.coloreUgello}</td>
+                            <td>${data.numeroCollo}</td>
+                            <td>
+                                <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
+                                    Elimina
+                                </button>
+                            </td>
+                        `;
+                    });
                 })
                 .catch((error) => {
-                    console.error("Errore nel caricamento dei dati: ", error);
+                    console.error("Errore nel caricamento delle configurazioni: ", error);
                 });
         }
 
         function validateForm() {
             let isValid = true;
-            // Reset previous errors
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
 
             const validations = {
@@ -172,8 +236,9 @@
             }
 
             const modello = document.getElementById('modello').value;
+            const dimensione = document.getElementById('dimensione').value;
             const dati = {
-                dimensione: document.getElementById('dimensione').value,
+                dimensione: dimensione,
                 quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
                 quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
                 coloreUgello: document.getElementById('coloreUgello').value,
@@ -181,14 +246,39 @@
                 dataModifica: new Date().toISOString()
             };
 
-            db.collection("modelli").doc(modello).set(dati)
+            // Usa la dimensione come ID del documento
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .doc(dimensione)
+                .set(dati)
                 .then(() => {
                     alert("Dati salvati con successo!");
+                    caricaConfigurazioni(modello);
+                    resetForm();
                 })
                 .catch((error) => {
                     alert("Errore durante il salvataggio: " + error.message);
                     console.error("Errore durante il salvataggio: ", error);
                 });
+        }
+
+        function eliminaConfigurazione(modello, dimensione) {
+            if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
+                db.collection("modelli")
+                    .doc(modello)
+                    .collection("configurazioni")
+                    .doc(dimensione)
+                    .delete()
+                    .then(() => {
+                        alert("Configurazione eliminata con successo!");
+                        caricaConfigurazioni(modello);
+                    })
+                    .catch((error) => {
+                        alert("Errore durante l'eliminazione: " + error.message);
+                        console.error("Errore durante l'eliminazione: ", error);
+                    });
+            }
         }
     </script>
 </body>
