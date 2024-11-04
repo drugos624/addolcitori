@@ -1,285 +1,213 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Modelli Addolcitori</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        select, input {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 1rem;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .hidden {
-            display: none;
-        }
-        .error {
-            color: red;
-            font-size: 0.875rem;
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .delete-btn {
-            background-color: #ff4444;
-        }
-        .delete-btn:hover {
-            background-color: #cc0000;
-        }
-    </style>
-</head>
-<body>
-    <h1>Gestione Modelli Addolcitori</h1>
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+
+const WaterSoftenerForm = () => {
+  const [model, setModel] = useState('');
+  const [formData, setFormData] = useState({
+    dimensione: '',
+    quantitaResina: '',
+    quantitaSottoLetto: '',
+    coloreUgello: '',
+    dimensioneUgello: '',
+    coloreInsertiFlowControl: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [savedConfigs, setSavedConfigs] = useState([]);
+
+  const isCTMModel = model === 'ctm old' || model === 'ctm 2.0';
+  const isHEModel = model === 'he 1' || model === 'he 1.5';
+
+  const validateForm = () => {
+    const newErrors = {};
+    const required = value => value.toString().trim() !== '';
+    const numeric = value => !isNaN(value) && parseFloat(value) > 0;
+
+    // Common validations for all models
+    if (!required(formData.dimensione)) newErrors.dimensione = 'Dimensione richiesta';
+    if (!numeric(formData.quantitaResina)) newErrors.quantitaResina = 'Quantità resina deve essere maggiore di 0';
+    if (!numeric(formData.quantitaSottoLetto)) newErrors.quantitaSottoLetto = 'Quantità sotto-letto deve essere maggiore di 0';
+    if (!required(formData.coloreUgello)) newErrors.coloreUgello = 'Colore ugello richiesto';
+    if (!required(formData.dimensioneUgello)) newErrors.dimensioneUgello = 'Dimensione ugello richiesta';
+
+    // Additional validation for CTM models
+    if (isCTMModel && !required(formData.coloreInsertiFlowControl)) {
+      newErrors.coloreInsertiFlowControl = 'Colore inserti flow-control richiesto';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (!validateForm()) return;
     
-    <div class="form-group">
-        <label for="modello">Modello:</label>
-        <select id="modello" onchange="showFields()">
-            <option value="">-- Seleziona --</option>
-            <option value="ctm old">CTM Old</option>
-            <option value="ctm 2.0">CTM 2.0</option>
-            <option value="he 1">HE 1"</option>
-            <option value="he 1.5">HE 1.5"</option>
-        </select>
-    </div>
-
-    <form id="modelloForm" class="hidden">
-        <div class="form-group">
-            <label for="dimensione">Dimensione:</label>
-            <input type="text" id="dimensione" required>
-            <div id="dimensione-error" class="error"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="quantitaResina">Quantità Resina (L):</label>
-            <input type="number" id="quantitaResina" min="0" step="0.1" required>
-            <div id="resina-error" class="error"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="quantitaSabbia">Quantità Sabbia (Kg):</label>
-            <input type="number" id="quantitaSabbia" min="0" step="0.1" required>
-            <div id="sabbia-error" class="error"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="coloreUgello">Colore Ugello:</label>
-            <input type="text" id="coloreUgello" required>
-            <div id="ugello-error" class="error"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="numeroCollo">Numero Collo:</label>
-            <input type="text" id="numeroCollo" required>
-            <div id="collo-error" class="error"></div>
-        </div>
-
-        <button type="button" onclick="inviaDati()">Salva Dati</button>
-    </form>
-
-    <div id="tabellaContainer" class="hidden">
-        <h2>Configurazioni Esistenti</h2>
-        <table id="tabellaConfigurazioni">
-            <thead>
-                <tr>
-                    <th>Dimensione</th>
-                    <th>Resina (L)</th>
-                    <th>Sabbia (Kg)</th>
-                    <th>Colore Ugello</th>
-                    <th>Numero Collo</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+    // Here you would typically save to Firebase
+    const newConfig = { ...formData, model };
+    setSavedConfigs([...savedConfigs, newConfig]);
     
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
-            authDomain: "addolcitori-2f8fe.firebaseapp.com",
-            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "addolcitori-2f8fe",
-            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
-            messagingSenderId: "399702428879",
-            appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
-        };
+    // Reset form
+    setFormData({
+      dimensione: '',
+      quantitaResina: '',
+      quantitaSottoLetto: '',
+      coloreUgello: '',
+      dimensioneUgello: '',
+      coloreInsertiFlowControl: ''
+    });
+  };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
 
-        function showFields() {
-            const modello = document.getElementById('modello').value;
-            const form = document.getElementById('modelloForm');
-            const tabellaContainer = document.getElementById('tabellaContainer');
-            if (modello) {
-                form.classList.remove('hidden');
-                tabellaContainer.classList.remove('hidden');
-                caricaConfigurazioni(modello);
-                resetForm();
-            } else {
-                form.classList.add('hidden');
-                tabellaContainer.classList.add('hidden');
-            }
-        }
+  return (
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle>Configurazione Addolcitore</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Modello</label>
+            <select 
+              className="w-full p-2 border rounded"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+            >
+              <option value="">-- Seleziona Modello --</option>
+              <option value="ctm old">CTM Old</option>
+              <option value="ctm 2.0">CTM 2.0</option>
+              <option value="he 1">HE 1"</option>
+              <option value="he 1.5">HE 1.5"</option>
+            </select>
+          </div>
 
-        function resetForm() {
-            document.getElementById('dimensione').value = '';
-            document.getElementById('quantitaResina').value = '';
-            document.getElementById('quantitaSabbia').value = '';
-            document.getElementById('coloreUgello').value = '';
-            document.getElementById('numeroCollo').value = '';
-            document.querySelectorAll('.error').forEach(el => el.textContent = '');
-        }
+          {model && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Dimensione</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded"
+                    value={formData.dimensione}
+                    onChange={(e) => handleInputChange('dimensione', e.target.value)}
+                  />
+                  {errors.dimensione && <p className="text-red-500 text-sm">{errors.dimensione}</p>}
+                </div>
 
-        function caricaConfigurazioni(modello) {
-            const tbody = document.querySelector('#tabellaConfigurazioni tbody');
-            tbody.innerHTML = '';
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Quantità Resina (L)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded"
+                    value={formData.quantitaResina}
+                    onChange={(e) => handleInputChange('quantitaResina', e.target.value)}
+                  />
+                  {errors.quantitaResina && <p className="text-red-500 text-sm">{errors.quantitaResina}</p>}
+                </div>
 
-            db.collection("modelli")
-                .doc(modello)
-                .collection("configurazioni")
-                .get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const row = tbody.insertRow();
-                        row.innerHTML = `
-                            <td>${data.dimensione}</td>
-                            <td>${data.quantitaResina}</td>
-                            <td>${data.quantitaSabbia}</td>
-                            <td>${data.coloreUgello}</td>
-                            <td>${data.numeroCollo}</td>
-                            <td>
-                                <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
-                                    Elimina
-                                </button>
-                            </td>
-                        `;
-                    });
-                })
-                .catch((error) => {
-                    console.error("Errore nel caricamento delle configurazioni: ", error);
-                });
-        }
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Quantità Sotto-letto (Kg)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded"
+                    value={formData.quantitaSottoLetto}
+                    onChange={(e) => handleInputChange('quantitaSottoLetto', e.target.value)}
+                  />
+                  {errors.quantitaSottoLetto && <p className="text-red-500 text-sm">{errors.quantitaSottoLetto}</p>}
+                </div>
 
-        function validateForm() {
-            let isValid = true;
-            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Colore Ugello</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded"
+                    value={formData.coloreUgello}
+                    onChange={(e) => handleInputChange('coloreUgello', e.target.value)}
+                  />
+                  {errors.coloreUgello && <p className="text-red-500 text-sm">{errors.coloreUgello}</p>}
+                </div>
 
-            const validations = {
-                'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
-                'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
-                'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
-                'coloreUgello': (value) => value.trim() !== '' || 'Inserire un colore valido',
-                'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
-            };
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Dimensione Ugello</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded"
+                    value={formData.dimensioneUgello}
+                    onChange={(e) => handleInputChange('dimensioneUgello', e.target.value)}
+                  />
+                  {errors.dimensioneUgello && <p className="text-red-500 text-sm">{errors.dimensioneUgello}</p>}
+                </div>
 
-            Object.entries(validations).forEach(([field, validator]) => {
-                const value = document.getElementById(field).value;
-                const errorMessage = validator(value);
-                if (errorMessage !== true) {
-                    document.getElementById(`${field}-error`).textContent = errorMessage;
-                    isValid = false;
-                }
-            });
+                {isCTMModel && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Colore Inserti Flow-Control</label>
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded"
+                      value={formData.coloreInsertiFlowControl}
+                      onChange={(e) => handleInputChange('coloreInsertiFlowControl', e.target.value)}
+                    />
+                    {errors.coloreInsertiFlowControl && (
+                      <p className="text-red-500 text-sm">{errors.coloreInsertiFlowControl}</p>
+                    )}
+                  </div>
+                )}
+              </div>
 
-            return isValid;
-        }
+              <button
+                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+                onClick={handleSubmit}
+              >
+                Salva Configurazione
+              </button>
+            </div>
+          )}
 
-        function inviaDati() {
-            if (!validateForm()) {
-                return;
-            }
+          {savedConfigs.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-medium mb-4">Configurazioni Salvate</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border p-2">Modello</th>
+                      <th className="border p-2">Dimensione</th>
+                      <th className="border p-2">Resina (L)</th>
+                      <th className="border p-2">Sotto-letto (Kg)</th>
+                      <th className="border p-2">Colore Ugello</th>
+                      <th className="border p-2">Dim. Ugello</th>
+                      {isCTMModel && <th className="border p-2">Flow-Control</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {savedConfigs.map((config, index) => (
+                      <tr key={index}>
+                        <td className="border p-2">{config.model}</td>
+                        <td className="border p-2">{config.dimensione}</td>
+                        <td className="border p-2">{config.quantitaResina}</td>
+                        <td className="border p-2">{config.quantitaSottoLetto}</td>
+                        <td className="border p-2">{config.coloreUgello}</td>
+                        <td className="border p-2">{config.dimensioneUgello}</td>
+                        {isCTMModel && (
+                          <td className="border p-2">{config.coloreInsertiFlowControl}</td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
-            const modello = document.getElementById('modello').value;
-            const dimensione = document.getElementById('dimensione').value;
-            const dati = {
-                dimensione: dimensione,
-                quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
-                quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
-                coloreUgello: document.getElementById('coloreUgello').value,
-                numeroCollo: document.getElementById('numeroCollo').value,
-                dataModifica: new Date().toISOString()
-            };
-
-            // Usa la dimensione come ID del documento
-            db.collection("modelli")
-                .doc(modello)
-                .collection("configurazioni")
-                .doc(dimensione)
-                .set(dati)
-                .then(() => {
-                    alert("Dati salvati con successo!");
-                    caricaConfigurazioni(modello);
-                    resetForm();
-                })
-                .catch((error) => {
-                    alert("Errore durante il salvataggio: " + error.message);
-                    console.error("Errore durante il salvataggio: ", error);
-                });
-        }
-
-        function eliminaConfigurazione(modello, dimensione) {
-            if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
-                db.collection("modelli")
-                    .doc(modello)
-                    .collection("configurazioni")
-                    .doc(dimensione)
-                    .delete()
-                    .then(() => {
-                        alert("Configurazione eliminata con successo!");
-                        caricaConfigurazioni(modello);
-                    })
-                    .catch((error) => {
-                        alert("Errore durante l'eliminazione: " + error.message);
-                        console.error("Errore durante l'eliminazione: ", error);
-                    });
-            }
-        }
-    </script>
-</body>
-</html>
+export default WaterSoftenerForm;
