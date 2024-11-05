@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -109,6 +108,22 @@
             <div id="ugello-error" class="error"></div>
         </div>
 
+        <div class="form-group" id="coloreInsertiGroup" style="display: none;">
+            <label for="coloreInserti">Colore Inserti:</label>
+            <select id="coloreInserti" required>
+                <option value="">-- Seleziona --</option>
+                <option value="nero 0.4-nero 0.4-nero 2.5">nero 0.4-nero 0.4-nero 2.5</option>
+                <option value="plug-plug-blu">plug-plug-blu</option>
+                <option value="plug-plug-rosso">plug-plug-rosso</option>
+                <option value="plug-plug-verde">plug-plug-verde</option>
+                <option value="plug-blu-blu">plug-blu-blu</option>
+                <option value="plug-rosso-rosso">plug-rosso-rosso</option>
+                <option value="blu-blu-arancione">blu-blu-arancione</option>
+                <option value="arancione-arancione-arancione">arancione-arancione-arancione</option>
+            </select>
+            <div id="inserti-error" class="error"></div>
+        </div>
+
         <div class="form-group">
             <label for="numeroCollo">Numero Collo:</label>
             <input type="text" id="numeroCollo" required>
@@ -127,6 +142,7 @@
                     <th>Resina (L)</th>
                     <th>Sabbia (Kg)</th>
                     <th>Colore Ugello</th>
+                    <th>Colore Inserti</th>
                     <th>Numero Collo</th>
                     <th>Azioni</th>
                 </tr>
@@ -156,9 +172,21 @@
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
             const tabellaContainer = document.getElementById('tabellaContainer');
+            const coloreInsertiGroup = document.getElementById('coloreInsertiGroup');
+            
             if (modello) {
                 form.classList.remove('hidden');
                 tabellaContainer.classList.remove('hidden');
+                
+                // Show colore inserti only for CTM models
+                if (modello === 'ctm old' || modello === 'ctm 2.0') {
+                    coloreInsertiGroup.style.display = 'block';
+                    document.getElementById('coloreInserti').required = true;
+                } else {
+                    coloreInsertiGroup.style.display = 'none';
+                    document.getElementById('coloreInserti').required = false;
+                }
+                
                 caricaConfigurazioni(modello);
                 resetForm();
             } else {
@@ -172,6 +200,7 @@
             document.getElementById('quantitaResina').value = '';
             document.getElementById('quantitaSabbia').value = '';
             document.getElementById('coloreUgello').value = '';
+            document.getElementById('coloreInserti').value = '';
             document.getElementById('numeroCollo').value = '';
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
         }
@@ -193,6 +222,7 @@
                             <td>${data.quantitaResina}</td>
                             <td>${data.quantitaSabbia}</td>
                             <td>${data.coloreUgello}</td>
+                            <td>${data.coloreInserti || '-'}</td>
                             <td>${data.numeroCollo}</td>
                             <td>
                                 <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
@@ -211,6 +241,9 @@
             let isValid = true;
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
 
+            const modello = document.getElementById('modello').value;
+            const isCTM = modello === 'ctm old' || modello === 'ctm 2.0';
+
             const validations = {
                 'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
                 'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
@@ -219,12 +252,19 @@
                 'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
             };
 
+            if (isCTM) {
+                validations['coloreInserti'] = (value) => value.trim() !== '' || 'Selezionare un colore inserti';
+            }
+
             Object.entries(validations).forEach(([field, validator]) => {
-                const value = document.getElementById(field).value;
-                const errorMessage = validator(value);
-                if (errorMessage !== true) {
-                    document.getElementById(`${field}-error`).textContent = errorMessage;
-                    isValid = false;
+                const element = document.getElementById(field);
+                if (element) {
+                    const value = element.value;
+                    const errorMessage = validator(value);
+                    if (errorMessage !== true) {
+                        document.getElementById(`${field}-error`).textContent = errorMessage;
+                        isValid = false;
+                    }
                 }
             });
 
@@ -247,7 +287,11 @@
                 dataModifica: new Date().toISOString()
             };
 
-            // Usa la dimensione come ID del documento
+            // Add coloreInserti only for CTM models
+            if (modello === 'ctm old' || modello === 'ctm 2.0') {
+                dati.coloreInserti = document.getElementById('coloreInserti').value;
+            }
+
             db.collection("modelli")
                 .doc(modello)
                 .collection("configurazioni")
