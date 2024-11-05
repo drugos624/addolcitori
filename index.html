@@ -145,23 +145,26 @@
         </table>
     </div>
 
+    <!-- Script Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
     
     <script>
+        // Configurazione Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
             authDomain: "addolcitori-2f8fe.firebaseapp.com",
-            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "addolcitori-2f8fe",
-            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+            storageBucket: "addolcitori-2f8fe.appspot.com",
             messagingSenderId: "399702428879",
             appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
         };
 
+        // Inizializza Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Dati default
         const datiDefault = {
             "60": {
                 cullex: 56,
@@ -213,15 +216,21 @@
             }
         };
 
+        // Funzione per mostrare i campi
         function showFields() {
+            console.log("showFields chiamata");
             const modello = document.getElementById('modello').value;
-            document.getElementById('modelloForm').style.display = modello ? 'block' : 'none';
             if (modello) {
+                document.getElementById('modelloForm').style.display = 'block';
                 caricaConfigurazioni(modello);
+            } else {
+                document.getElementById('modelloForm').style.display = 'none';
             }
         }
 
+        // Funzione per caricare i valori default
         function caricaValoriDefault() {
+            console.log("caricaValoriDefault chiamata");
             const dimensione = document.getElementById('dimensione').value;
             const dati = datiDefault[dimensione];
             
@@ -233,7 +242,9 @@
             }
         }
 
+        // Funzione per validare il form
         function validateForm() {
+            console.log("validateForm chiamata");
             const required = ['dimensione', 'quantitaResina', 'quantitaSabbia', 'spazioLibero', 'inserti'];
             let isValid = true;
 
@@ -251,13 +262,16 @@
             return isValid;
         }
 
+        // Funzione per inviare i dati
         function inviaDati() {
+            console.log("inviaDati chiamata");
             if (!validateForm()) {
                 return;
             }
 
             const modello = document.getElementById('modello').value;
             const dimensione = document.getElementById('dimensione').value;
+            
             const dati = {
                 dimensione: dimensione,
                 quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
@@ -267,22 +281,27 @@
                 dataModifica: new Date().toISOString()
             };
 
+            console.log("Salvataggio dati:", dati);
+
             db.collection("modelli")
                 .doc(modello)
                 .collection("configurazioni")
                 .doc(dimensione)
                 .set(dati)
                 .then(() => {
+                    console.log("Dati salvati con successo");
                     alert("Dati salvati con successo!");
                     caricaConfigurazioni(modello);
                 })
                 .catch((error) => {
+                    console.error("Errore durante il salvataggio:", error);
                     alert("Errore durante il salvataggio: " + error.message);
-                    console.error("Errore durante il salvataggio: ", error);
                 });
         }
 
+        // Funzione per caricare le configurazioni
         function caricaConfigurazioni(modello) {
+            console.log("caricaConfigurazioni chiamata per modello:", modello);
             const tbody = document.querySelector('#tabellaConfigurazioni tbody');
             tbody.innerHTML = '';
 
@@ -309,10 +328,11 @@
                     });
                 })
                 .catch((error) => {
-                    console.error("Errore nel caricamento delle configurazioni: ", error);
+                    console.error("Errore nel caricamento delle configurazioni:", error);
                 });
         }
 
+        // Funzione per eliminare una configurazione
         function eliminaConfigurazione(modello, dimensione) {
             if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
                 db.collection("modelli")
@@ -326,7 +346,7 @@
                     })
                     .catch((error) => {
                         alert("Errore durante l'eliminazione: " + error.message);
-                        console.error("Errore durante l'eliminazione: ", error);
+                        console.error("Errore durante l'eliminazione:", error);
                     });
             }
         }
