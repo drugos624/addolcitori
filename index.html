@@ -6,7 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Modelli Addolcitori</title>
     <style>
-        /* ... (stessi stili di prima) ... */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .error {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #ff4444;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -23,7 +83,7 @@
         </select>
     </div>
 
-    <form id="modelloForm" class="hidden">
+    <form id="modelloForm">
         <div class="form-group">
             <label for="dimensione">Dimensione:</label>
             <select id="dimensione" onchange="caricaValoriDefault()">
@@ -40,52 +100,121 @@
             <div id="dimensione-error" class="error"></div>
         </div>
 
-        <!-- ... (resto del form uguale) ... -->
+        <div class="form-group">
+            <label for="quantitaResina">Quantità Resina (L):</label>
+            <input type="number" id="quantitaResina" min="0" step="0.1" required>
+            <div id="resina-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="quantitaSabbia">Quantità Sabbia (Kg):</label>
+            <input type="number" id="quantitaSabbia" min="0" step="0.1" required>
+            <div id="sabbia-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="spazioLibero">Spazio Libero (mm):</label>
+            <input type="number" id="spazioLibero" min="0" step="0.1" required>
+            <div id="spazio-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" required>
+            <div id="ugello-error" class="error"></div>
+        </div>
+
+        <div class="form-group" id="coloreInsertiGroup" style="display: none;">
+            <label for="coloreInserti">Colore Inserti:</label>
+            <select id="coloreInserti" required>
+                <option value="">-- Seleziona --</option>
+                <option value="nero 0.4-nero 0.4-nero 2.5">nero 0.4-nero 0.4-nero 2.5</option>
+                <option value="plug-plug-blu">plug-plug-blu</option>
+                <option value="plug-plug-rosso">plug-plug-rosso</option>
+                <option value="plug-plug-verde">plug-plug-verde</option>
+                <option value="plug-blu-blu">plug-blu-blu</option>
+                <option value="plug-rosso-rosso">plug-rosso-rosso</option>
+                <option value="blu-blu-arancione">blu-blu-arancione</option>
+                <option value="arancione-arancione-arancione">arancione-arancione-arancione</option>
+            </select>
+            <div id="inserti-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroCollo">Numero Collo:</label>
+            <input type="text" id="numeroCollo" required>
+            <div id="collo-error" class="error"></div>
+        </div>
+
+        <button type="button" onclick="inviaDati()">Salva Dati</button>
+        <button type="button" onclick="caricaValoriDefault()">Carica Valori Default</button>
     </form>
 
-    <!-- ... (resto del HTML uguale) ... -->
+    <div id="tabellaContainer">
+        <h2>Configurazioni Esistenti</h2>
+        <table id="tabellaConfigurazioni">
+            <thead>
+                <tr>
+                    <th>Dimensione</th>
+                    <th>Resina (L)</th>
+                    <th>Sabbia (Kg)</th>
+                    <th>Spazio Libero (mm)</th>
+                    <th>Colore Ugello</th>
+                    <th>Colore Inserti</th>
+                    <th>Numero Collo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+    
     <script>
-        // ... (configurazione Firebase uguale) ... 
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
+            authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "addolcitori-2f8fe",
+            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
+            messagingSenderId: "399702428879",
+            appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const valoriDefault = {
+            "60": { quantitaResina: 56, quantitaSabbia: 14, spazioLibero: 482.6 },
+            "90": { quantitaResina: 85, quantitaSabbia: 18, spazioLibero: 723.9 },
+            "120": { quantitaResina: 113, quantitaSabbia: 23, spazioLibero: 762 },
+            "150": { quantitaResina: 142, quantitaSabbia: 32, spazioLibero: 762 },
+            "210": { quantitaResina: 198, quantitaSabbia: 32, spazioLibero: 711.2 },
+            "300": { quantitaResina: 283, quantitaSabbia: 59, spazioLibero: 863.6 },
+            "450": { quantitaResina: 425, quantitaSabbia: 136, spazioLibero: 863.6 },
+            "600": { quantitaResina: 566, quantitaSabbia: 181, spazioLibero: 782.3 }
+        };
 
         function showFields() {
-            console.log("showFields chiamato"); // Debug
             const modello = document.getElementById('modello').value;
-            const form = document.getElementById('modelloForm');
-            const tabellaContainer = document.getElementById('tabellaContainer');
             const coloreInsertiGroup = document.getElementById('coloreInsertiGroup');
             
-            console.log("Modello selezionato:", modello); // Debug
-            
-            if (modello) {
-                form.classList.remove('hidden');
-                tabellaContainer.classList.remove('hidden');
-                
-                // Mostra/nascondi il gruppo colore inserti per i modelli CTM
-                if (modello === 'ctm old' || modello === 'ctm 2.0') {
-                    coloreInsertiGroup.style.display = 'block';
-                    document.getElementById('coloreInserti').required = true;
-                } else {
-                    coloreInsertiGroup.style.display = 'none';
-                    document.getElementById('coloreInserti').required = false;
-                }
-                
-                // Carica le configurazioni esistenti
-                caricaConfigurazioni(modello);
-                resetForm();
+            if (modello === 'ctm old' || modello === 'ctm 2.0') {
+                coloreInsertiGroup.style.display = 'block';
+                document.getElementById('coloreInserti').required = true;
             } else {
-                form.classList.add('hidden');
-                tabellaContainer.classList.add('hidden');
+                coloreInsertiGroup.style.display = 'none';
+                document.getElementById('coloreInserti').required = false;
             }
+            
+            caricaConfigurazioni(modello);
         }
 
-        // Modificata la funzione per caricare i valori di default
         function caricaValoriDefault() {
             const dimensione = document.getElementById('dimensione').value;
             const valori = valoriDefault[dimensione];
-            console.log("Caricamento valori default per dimensione:", dimensione); // Debug
-            console.log("Valori trovati:", valori); // Debug
-            
             if (valori) {
                 document.getElementById('quantitaResina').value = valori.quantitaResina;
                 document.getElementById('quantitaSabbia').value = valori.quantitaSabbia;
@@ -93,14 +222,117 @@
             }
         }
 
-        // ... (resto delle funzioni uguale) ...
+        function resetForm() {
+            document.getElementById('dimensione').value = '';
+            document.getElementById('quantitaResina').value = '';
+            document.getElementById('quantitaSabbia').value = '';
+            document.getElementById('spazioLibero').value = '';
+            document.getElementById('coloreUgello').value = '';
+            document.getElementById('coloreInserti').value = '';
+            document.getElementById('numeroCollo').value = '';
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+        }
 
-        // Aggiungiamo un listener per verificare che tutto sia caricato correttamente
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM completamente caricato"); // Debug
-            // Verifica iniziale dello stato del form
-            showFields();
-        });
-    </script>
-</body>
-</html>
+        function caricaConfigurazioni(modello) {
+            if (!modello) return;
+            
+            const tbody = document.querySelector('#tabellaConfigurazioni tbody');
+            tbody.innerHTML = '';
+
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const row = tbody.insertRow();
+                        row.innerHTML = `
+                            <td>${data.dimensione}</td>
+                            <td>${data.quantitaResina}</td>
+                            <td>${data.quantitaSabbia}</td>
+                            <td>${data.spazioLibero}</td>
+                            <td>${data.coloreUgello}</td>
+                            <td>${data.coloreInserti || '-'}</td>
+                            <td>${data.numeroCollo}</td>
+                            <td>
+                                <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
+                                    Elimina
+                                </button>
+                            </td>
+                        `;
+                    });
+                })
+                .catch((error) => {
+                    console.error("Errore nel caricamento delle configurazioni: ", error);
+                });
+        }
+
+        function validateForm() {
+            let isValid = true;
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            const modello = document.getElementById('modello').value;
+            const isCTM = modello === 'ctm old' || modello === 'ctm 2.0';
+
+            const validations = {
+                'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
+                'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'spazioLibero': (value) => value > 0 || 'Lo spazio libero deve essere maggiore di 0',
+                'coloreUgello': (value) => value.trim() !== '' || 'Inserire un colore valido',
+                'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
+            };
+
+            if (isCTM) {
+                validations['coloreInserti'] = (value) => value.trim() !== '' || 'Selezionare un colore inserti';
+            }
+
+            Object.entries(validations).forEach(([field, validator]) => {
+                const element = document.getElementById(field);
+                if (element) {
+                    const value = element.value;
+                    const errorMessage = validator(value);
+                    if (errorMessage !== true) {
+                        document.getElementById(`${field}-error`).textContent = errorMessage;
+                        isValid = false;
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+        function inviaDati() {
+            if (!validateForm()) {
+                return;
+            }
+
+            const modello = document.getElementById('modello').value;
+            const dimensione = document.getElementById('dimensione').value;
+            const dati = {
+                dimensione: dimensione,
+                quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
+                quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
+                spazioLibero: parseFloat(document.getElementById('spazioLibero').value),
+                coloreUgello: document.getElementById('coloreUgello').value,
+                numeroCollo: document.getElementById('numeroCollo').value,
+                dataModifica: new Date().toISOString()
+            };
+
+            if (modello === 'ctm old' || modello === 'ctm 2.0') {
+                dati.coloreInserti = document.getElementById('coloreInserti').value;
+            }
+
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .doc(dimensione)
+                .set(dati)
+                .then(() => {
+                    alert("Dati salvati con successo!");
+                    caricaConfigurazioni(modello);
+                    resetForm();
+                })
+                .catch((error) => {
+                    alert("Errore durante il salvataggio
