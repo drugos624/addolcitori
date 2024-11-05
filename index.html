@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -6,7 +7,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Modelli Addolcitori</title>
     <style>
-        /* ... (stesso CSS precedente) ... */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #ff4444;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -23,192 +84,203 @@
         </select>
     </div>
 
-    <form id="modelloForm" onsubmit="handleSubmit(event)">
+    <form id="modelloForm" class="hidden">
         <div class="form-group">
             <label for="dimensione">Dimensione:</label>
-            <select id="dimensione" onchange="caricaValoriDefault()" required>
-                <option value="">-- Seleziona --</option>
-                <option value="60">60</option>
-                <option value="90">90</option>
-                <option value="120">120</option>
-                <option value="150">150</option>
-                <option value="210">210</option>
-                <option value="300">300</option>
-                <option value="450">450</option>
-                <option value="600">600</option>
-            </select>
+            <input type="text" id="dimensione" required>
             <div id="dimensione-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="quantitaResina">Quantità Resina (Cullex) (L):</label>
-            <input type="number" id="quantitaResina" step="0.1" required readonly class="readonly-field">
+            <label for="quantitaResina">Quantità Resina (L):</label>
+            <input type="number" id="quantitaResina" min="0" step="0.1" required>
             <div id="resina-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="quantitaSabbia">Quantità Sotto-letto (Cullsan) (Kg):</label>
-            <input type="number" id="quantitaSabbia" step="0.1" required readonly class="readonly-field">
+            <label for="quantitaSabbia">Quantità Sabbia (Kg):</label>
+            <input type="number" id="quantitaSabbia" min="0" step="0.1" required>
             <div id="sabbia-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="spazioLibero">Spazio Libero (mm):</label>
-            <input type="number" id="spazioLibero" step="0.1" required readonly class="readonly-field">
-            <div id="spazio-error" class="error"></div>
+            <label for="coloreUgello">Colore Ugello:</label>
+            <input type="text" id="coloreUgello" required>
+            <div id="ugello-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="inserti">Inserti (gpm):</label>
-            <input type="text" id="inserti" required readonly class="readonly-field">
-            <div id="inserti-error" class="error"></div>
+            <label for="numeroCollo">Numero Collo:</label>
+            <input type="text" id="numeroCollo" required>
+            <div id="collo-error" class="error"></div>
         </div>
 
-        <button type="submit">Salva Dati</button>
+        <button type="button" onclick="inviaDati()">Salva Dati</button>
     </form>
 
-    <div id="tabellaContainer">
-        <!-- ... (stesso HTML della tabella) ... -->
+    <div id="tabellaContainer" class="hidden">
+        <h2>Configurazioni Esistenti</h2>
+        <table id="tabellaConfigurazioni">
+            <thead>
+                <tr>
+                    <th>Dimensione</th>
+                    <th>Resina (L)</th>
+                    <th>Sabbia (Kg)</th>
+                    <th>Colore Ugello</th>
+                    <th>Numero Collo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
-    <!-- Script Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
     
     <script>
-        // Configurazione Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAlu5Q1Ww3u2Dt_INeKOm5GSeEU-qFDtJs",
             authDomain: "addolcitori-2f8fe.firebaseapp.com",
+            databaseURL: "https://addolcitori-2f8fe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "addolcitori-2f8fe",
-            storageBucket: "addolcitori-2f8fe.appspot.com",
+            storageBucket: "addolcitori-2f8fe.firebasestorage.app",
             messagingSenderId: "399702428879",
             appId: "1:399702428879:web:b9724499e30c49a3a8bbba"
         };
 
-        // Inizializza Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Dati default (stessi di prima)
-        const datiDefault = {
-            // ... (stessi dati default) ...
-        };
-
-        // Funzione per gestire il submit del form
-        function handleSubmit(event) {
-            event.preventDefault(); // Previene il comportamento di default del form
-            console.log("Form submitted");
-            inviaDati();
-        }
-
-        // Funzione per mostrare i campi
         function showFields() {
-            console.log("showFields chiamata");
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
-            
+            const tabellaContainer = document.getElementById('tabellaContainer');
             if (modello) {
-                form.style.display = 'block';
+                form.classList.remove('hidden');
+                tabellaContainer.classList.remove('hidden');
                 caricaConfigurazioni(modello);
+                resetForm();
             } else {
-                form.style.display = 'none';
+                form.classList.add('hidden');
+                tabellaContainer.classList.add('hidden');
             }
         }
 
-        // Funzione per caricare i valori default
-        function caricaValoriDefault() {
-            console.log("caricaValoriDefault chiamata");
-            const dimensione = document.getElementById('dimensione').value;
-            const dati = datiDefault[dimensione];
-            
-            if (dati) {
-                document.getElementById('quantitaResina').value = dati.cullex;
-                document.getElementById('quantitaSabbia').value = dati.cullsan;
-                document.getElementById('spazioLibero').value = dati.spazioLibero;
-                document.getElementById('inserti').value = dati.inserti;
-            }
+        function resetForm() {
+            document.getElementById('dimensione').value = '';
+            document.getElementById('quantitaResina').value = '';
+            document.getElementById('quantitaSabbia').value = '';
+            document.getElementById('coloreUgello').value = '';
+            document.getElementById('numeroCollo').value = '';
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
         }
 
-        // Funzione per validare il form
+        function caricaConfigurazioni(modello) {
+            const tbody = document.querySelector('#tabellaConfigurazioni tbody');
+            tbody.innerHTML = '';
+
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const row = tbody.insertRow();
+                        row.innerHTML = `
+                            <td>${data.dimensione}</td>
+                            <td>${data.quantitaResina}</td>
+                            <td>${data.quantitaSabbia}</td>
+                            <td>${data.coloreUgello}</td>
+                            <td>${data.numeroCollo}</td>
+                            <td>
+                                <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
+                                    Elimina
+                                </button>
+                            </td>
+                        `;
+                    });
+                })
+                .catch((error) => {
+                    console.error("Errore nel caricamento delle configurazioni: ", error);
+                });
+        }
+
         function validateForm() {
-            console.log("validateForm chiamata");
-            const required = ['dimensione', 'quantitaResina', 'quantitaSabbia', 'spazioLibero', 'inserti'];
             let isValid = true;
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
 
-            required.forEach(field => {
-                const element = document.getElementById(field);
-                const error = document.getElementById(`${field}-error`);
-                
-                if (!element.value.trim()) {
-                    error.textContent = 'Campo obbligatorio';
+            const validations = {
+                'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
+                'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'coloreUgello': (value) => value.trim() !== '' || 'Inserire un colore valido',
+                'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
+            };
+
+            Object.entries(validations).forEach(([field, validator]) => {
+                const value = document.getElementById(field).value;
+                const errorMessage = validator(value);
+                if (errorMessage !== true) {
+                    document.getElementById(`${field}-error`).textContent = errorMessage;
                     isValid = false;
-                } else {
-                    error.textContent = '';
                 }
             });
-
-            // Verifica che sia stato selezionato un modello
-            const modello = document.getElementById('modello').value;
-            if (!modello) {
-                alert("Seleziona un modello prima di salvare i dati");
-                isValid = false;
-            }
 
             return isValid;
         }
 
-        // Funzione per inviare i dati
-        async function inviaDati() {
-            console.log("inviaDati chiamata");
+        function inviaDati() {
             if (!validateForm()) {
                 return;
             }
 
             const modello = document.getElementById('modello').value;
             const dimensione = document.getElementById('dimensione').value;
-            
-            try {
-                const dati = {
-                    dimensione: dimensione,
-                    quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
-                    quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
-                    spazioLibero: parseFloat(document.getElementById('spazioLibero').value),
-                    inserti: document.getElementById('inserti').value,
-                    dataModifica: new Date().toISOString()
-                };
+            const dati = {
+                dimensione: dimensione,
+                quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
+                quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
+                coloreUgello: document.getElementById('coloreUgello').value,
+                numeroCollo: document.getElementById('numeroCollo').value,
+                dataModifica: new Date().toISOString()
+            };
 
-                console.log("Salvataggio dati:", dati);
+            // Usa la dimensione come ID del documento
+            db.collection("modelli")
+                .doc(modello)
+                .collection("configurazioni")
+                .doc(dimensione)
+                .set(dati)
+                .then(() => {
+                    alert("Dati salvati con successo!");
+                    caricaConfigurazioni(modello);
+                    resetForm();
+                })
+                .catch((error) => {
+                    alert("Errore durante il salvataggio: " + error.message);
+                    console.error("Errore durante il salvataggio: ", error);
+                });
+        }
 
-                await db.collection("modelli")
+        function eliminaConfigurazione(modello, dimensione) {
+            if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
+                db.collection("modelli")
                     .doc(modello)
                     .collection("configurazioni")
                     .doc(dimensione)
-                    .set(dati);
-
-                console.log("Dati salvati con successo");
-                alert("Dati salvati con successo!");
-                caricaConfigurazioni(modello);
-            } catch (error) {
-                console.error("Errore durante il salvataggio:", error);
-                alert("Errore durante il salvataggio: " + error.message);
+                    .delete()
+                    .then(() => {
+                        alert("Configurazione eliminata con successo!");
+                        caricaConfigurazioni(modello);
+                    })
+                    .catch((error) => {
+                        alert("Errore durante l'eliminazione: " + error.message);
+                        console.error("Errore durante l'eliminazione: ", error);
+                    });
             }
         }
-
-        // Funzione per caricare le configurazioni
-        function caricaConfigurazioni(modello) {
-            // ... (stesso codice di prima) ...
-        }
-
-        // Funzione per eliminare una configurazione
-        function eliminaConfigurazione(modello, dimensione) {
-            // ... (stesso codice di prima) ...
-        }
-
-        // Inizializza la visualizzazione
-        document.addEventListener('DOMContentLoaded', () => {
-            showFields();
-        });
     </script>
 </body>
 </html>
