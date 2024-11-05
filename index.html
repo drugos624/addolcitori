@@ -2,9 +2,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Modelli Addolcitori</title>
+    <title>Configurazione CTM</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,9 +38,6 @@
         button:hover {
             background-color: #45a049;
         }
-        .hidden {
-            display: none;
-        }
         .error {
             color: red;
             font-size: 0.875rem;
@@ -70,73 +66,134 @@
     </style>
 </head>
 <body>
-    <h1>Gestione Modelli Addolcitori</h1>
+    <h1>Configurazione CTM</h1>
     
-    <div class="form-group">
-        <label for="modello">Modello:</label>
-        <select id="modello" onchange="showFields()">
-            <option value="">-- Seleziona --</option>
-            <option value="ctm old">CTM Old</option>
-            <option value="ctm 2.0">CTM 2.0</option>
-            <option value="he 1">HE 1"</option>
-            <option value="he 1.5">HE 1.5"</option>
-        </select>
-    </div>
-
-    <form id="modelloForm" class="hidden">
+    <form id="ctmForm">
         <div class="form-group">
             <label for="dimensione">Dimensione:</label>
-            <input type="text" id="dimensione" required>
+            <select id="dimensione" required>
+                <option value="">-- Seleziona --</option>
+                <option value="60">60</option>
+                <option value="90">90</option>
+                <option value="120">120</option>
+                <option value="150">150</option>
+                <option value="210">210</option>
+                <option value="300">300</option>
+                <option value="450">450</option>
+                <option value="600">600</option>
+            </select>
             <div id="dimensione-error" class="error"></div>
         </div>
 
         <div class="form-group">
             <label for="quantitaResina">Quantità Resina (L):</label>
-            <input type="number" id="quantitaResina" min="0" step="0.1" required>
+            <select id="quantitaResina" required>
+                <option value="">-- Seleziona --</option>
+                <option value="56">56</option>
+                <option value="85">85</option>
+                <option value="113">113</option>
+                <option value="142">142</option>
+                <option value="198">198</option>
+                <option value="283">283</option>
+                <option value="425">425</option>
+                <option value="556">556</option>
+            </select>
             <div id="resina-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="quantitaSabbia">Quantità Sabbia (Kg):</label>
-            <input type="number" id="quantitaSabbia" min="0" step="0.1" required>
-            <div id="sabbia-error" class="error"></div>
+            <label for="quantitaSottoLetto">Quantità Sotto-letto (Kg):</label>
+            <select id="quantitaSottoLetto" required>
+                <option value="">-- Seleziona --</option>
+                <option value="14">14</option>
+                <option value="18">18</option>
+                <option value="23">23</option>
+                <option value="32">32</option>
+                <option value="59">59</option>
+                <option value="136">136</option>
+                <option value="181">181</option>
+            </select>
+            <div id="sottoletto-error" class="error"></div>
         </div>
 
-        <div class="form-group" id="coloreUgelloGroup">
-            <label for="coloreUgello">Colore Ugello:</label>
-            <select id="coloreUgello" class="hidden">
+        <div class="form-group">
+            <label for="spazioLibero">Spazio Libero:</label>
+            <select id="spazioLibero" required>
+                <option value="">-- Seleziona --</option>
+                <option value="482">482</option>
+                <option value="723">723</option>
+                <option value="762">762</option>
+                <option value="711">711</option>
+                <option value="863">863</option>
+                <option value="782">782</option>
+            </select>
+            <div id="spazio-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="insertiFlow">Inserti Flow Control:</label>
+            <select id="insertiFlow" required>
                 <option value="">-- Seleziona --</option>
                 <option value="0.4 nero-0.4 nero-2.5 nero">0.4 nero-0.4 nero-2.5 nero</option>
                 <option value="plug-plug-blu">plug-plug-blu</option>
+                <option value="plug-plug-rosso">plug-plug-rosso</option>
                 <option value="plug-plug-verde">plug-plug-verde</option>
                 <option value="plug-blu-blu">plug-blu-blu</option>
                 <option value="plug-rosso-rosso">plug-rosso-rosso</option>
                 <option value="blu-blu-arancione">blu-blu-arancione</option>
                 <option value="arancione-arancione-arancione">arancione-arancione-arancione</option>
             </select>
-            <input type="text" id="coloreUgelloInput" class="hidden">
+            <div id="inserti-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="coloreUgello">Colore Ugello:</label>
+            <select id="coloreUgello" required>
+                <option value="">-- Seleziona --</option>
+                <option value="nero">Nero</option>
+                <option value="viola">Viola</option>
+                <option value="rosso">Rosso</option>
+                <option value="bianco">Bianco</option>
+                <option value="blu">Blu</option>
+                <option value="beige">Beige</option>
+            </select>
             <div id="ugello-error" class="error"></div>
         </div>
 
         <div class="form-group">
-            <label for="numeroCollo">Numero Collo:</label>
-            <input type="text" id="numeroCollo" required>
+            <label for="collo">Collo:</label>
+            <select id="collo" required>
+                <option value="">-- Seleziona --</option>
+                <option value="blu n.3">Blu n.3</option>
+                <option value="blu n.4">Blu n.4</option>
+                <option value="blu n.5">Blu n.5</option>
+                <option value="blu n.8">Blu n.8</option>
+            </select>
             <div id="collo-error" class="error"></div>
         </div>
 
-        <button type="button" onclick="inviaDati()">Salva Dati</button>
+        <div class="form-group">
+            <label for="capacitaScambio">Capacità Scambio:</label>
+            <input type="number" id="capacitaScambio" required min="0" step="0.1">
+            <div id="capacita-error" class="error"></div>
+        </div>
+
+        <button type="button" onclick="inviaDati()">Salva Configurazione</button>
     </form>
 
-    <div id="tabellaContainer" class="hidden">
+    <div id="tabellaContainer">
         <h2>Configurazioni Esistenti</h2>
         <table id="tabellaConfigurazioni">
             <thead>
                 <tr>
                     <th>Dimensione</th>
                     <th>Resina (L)</th>
-                    <th>Sabbia (Kg)</th>
+                    <th>Sotto-letto (Kg)</th>
+                    <th>Spazio Libero</th>
+                    <th>Inserti Flow</th>
                     <th>Colore Ugello</th>
-                    <th>Numero Collo</th>
+                    <th>Collo</th>
+                    <th>Capacità Scambio</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -161,55 +218,45 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function showFields() {
-            const modello = document.getElementById('modello').value;
-            const form = document.getElementById('modelloForm');
-            const tabellaContainer = document.getElementById('tabellaContainer');
-            const coloreUgelloSelect = document.getElementById('coloreUgello');
-            const coloreUgelloInput = document.getElementById('coloreUgelloInput');
-            
-            if (modello) {
-                form.classList.remove('hidden');
-                tabellaContainer.classList.remove('hidden');
-                
-                // Show dropdown for CTM models, text input for others
-                if (modello === 'ctm old' || modello === 'ctm 2.0') {
-                    coloreUgelloSelect.classList.remove('hidden');
-                    coloreUgelloInput.classList.add('hidden');
-                    coloreUgelloSelect.required = true;
-                    coloreUgelloInput.required = false;
-                } else {
-                    coloreUgelloSelect.classList.add('hidden');
-                    coloreUgelloInput.classList.remove('hidden');
-                    coloreUgelloSelect.required = false;
-                    coloreUgelloInput.required = true;
-                }
-                
-                caricaConfigurazioni(modello);
-                resetForm();
-            } else {
-                form.classList.add('hidden');
-                tabellaContainer.classList.add('hidden');
-            }
-        }
-
-        function resetForm() {
-            document.getElementById('dimensione').value = '';
-            document.getElementById('quantitaResina').value = '';
-            document.getElementById('quantitaSabbia').value = '';
-            document.getElementById('coloreUgello').value = '';
-            document.getElementById('coloreUgelloInput').value = '';
-            document.getElementById('numeroCollo').value = '';
+        function validateForm() {
+            let isValid = true;
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            const fields = [
+                'dimensione',
+                'quantitaResina',
+                'quantitaSottoLetto',
+                'spazioLibero',
+                'insertiFlow',
+                'coloreUgello',
+                'collo',
+                'capacitaScambio'
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!element.value) {
+                    document.getElementById(`${field.replace('Input', '')}-error`).textContent = 
+                        'Questo campo è obbligatorio';
+                    isValid = false;
+                }
+            });
+
+            const capacita = document.getElementById('capacitaScambio').value;
+            if (capacita <= 0) {
+                document.getElementById('capacita-error').textContent = 
+                    'La capacità deve essere maggiore di 0';
+                isValid = false;
+            }
+
+            return isValid;
         }
 
-        function caricaConfigurazioni(modello) {
+        function caricaConfigurazioni() {
             const tbody = document.querySelector('#tabellaConfigurazioni tbody');
             tbody.innerHTML = '';
 
-            db.collection("modelli")
-                .doc(modello)
-                .collection("configurazioni")
+            db.collection("configurazioni_ctm")
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -218,11 +265,14 @@
                         row.innerHTML = `
                             <td>${data.dimensione}</td>
                             <td>${data.quantitaResina}</td>
-                            <td>${data.quantitaSabbia}</td>
+                            <td>${data.quantitaSottoLetto}</td>
+                            <td>${data.spazioLibero}</td>
+                            <td>${data.insertiFlow}</td>
                             <td>${data.coloreUgello}</td>
-                            <td>${data.numeroCollo}</td>
+                            <td>${data.collo}</td>
+                            <td>${data.capacitaScambio}</td>
                             <td>
-                                <button class="delete-btn" onclick="eliminaConfigurazione('${modello}', '${doc.id}')">
+                                <button class="delete-btn" onclick="eliminaConfigurazione('${doc.id}')">
                                     Elimina
                                 </button>
                             </td>
@@ -234,71 +284,29 @@
                 });
         }
 
-        function validateForm() {
-            let isValid = true;
-            document.querySelectorAll('.error').forEach(el => el.textContent = '');
-
-            const modello = document.getElementById('modello').value;
-            const isCTM = modello === 'ctm old' || modello === 'ctm 2.0';
-            
-            const validations = {
-                'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
-                'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
-                'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
-                'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
-            };
-
-            // Validate color based on model type
-            if (isCTM) {
-                validations['coloreUgello'] = (value) => value !== '' || 'Selezionare un colore ugello';
-            } else {
-                validations['coloreUgelloInput'] = (value) => value.trim() !== '' || 'Inserire un colore ugello valido';
-            }
-
-            Object.entries(validations).forEach(([field, validator]) => {
-                const element = document.getElementById(field);
-                if (element) {
-                    const value = element.value;
-                    const errorMessage = validator(value);
-                    if (errorMessage !== true) {
-                        document.getElementById(`${field.replace('Input', '')}-error`).textContent = errorMessage;
-                        isValid = false;
-                    }
-                }
-            });
-
-            return isValid;
-        }
-
         function inviaDati() {
             if (!validateForm()) {
                 return;
             }
 
-            const modello = document.getElementById('modello').value;
-            const dimensione = document.getElementById('dimensione').value;
-            const isCTM = modello === 'ctm old' || modello === 'ctm 2.0';
-            
             const dati = {
-                dimensione: dimensione,
-                quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
-                quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
-                coloreUgello: isCTM ? 
-                    document.getElementById('coloreUgello').value : 
-                    document.getElementById('coloreUgelloInput').value,
-                numeroCollo: document.getElementById('numeroCollo').value,
+                dimensione: document.getElementById('dimensione').value,
+                quantitaResina: document.getElementById('quantitaResina').value,
+                quantitaSottoLetto: document.getElementById('quantitaSottoLetto').value,
+                spazioLibero: document.getElementById('spazioLibero').value,
+                insertiFlow: document.getElementById('insertiFlow').value,
+                coloreUgello: document.getElementById('coloreUgello').value,
+                collo: document.getElementById('collo').value,
+                capacitaScambio: parseFloat(document.getElementById('capacitaScambio').value),
                 dataModifica: new Date().toISOString()
             };
 
-            db.collection("modelli")
-                .doc(modello)
-                .collection("configurazioni")
-                .doc(dimensione)
-                .set(dati)
+            db.collection("configurazioni_ctm")
+                .add(dati)
                 .then(() => {
-                    alert("Dati salvati con successo!");
-                    caricaConfigurazioni(modello);
-                    resetForm();
+                    alert("Configurazione salvata con successo!");
+                    document.getElementById('ctmForm').reset();
+                    caricaConfigurazioni();
                 })
                 .catch((error) => {
                     alert("Errore durante il salvataggio: " + error.message);
@@ -306,16 +314,14 @@
                 });
         }
 
-        function eliminaConfigurazione(modello, dimensione) {
+        function eliminaConfigurazione(id) {
             if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
-                db.collection("modelli")
-                    .doc(modello)
-                    .collection("configurazioni")
-                    .doc(dimensione)
+                db.collection("configurazioni_ctm")
+                    .doc(id)
                     .delete()
                     .then(() => {
                         alert("Configurazione eliminata con successo!");
-                        caricaConfigurazioni(modello);
+                        caricaConfigurazioni();
                     })
                     .catch((error) => {
                         alert("Errore durante l'eliminazione: " + error.message);
@@ -323,6 +329,9 @@
                     });
             }
         }
+
+        // Load configurations on page load
+        document.addEventListener('DOMContentLoaded', caricaConfigurazioni);
     </script>
 </body>
 </html>
