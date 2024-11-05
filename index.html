@@ -103,6 +103,12 @@
         </div>
 
         <div class="form-group">
+            <label for="spazioLibero">Spazio Libero (mm):</label>
+            <input type="number" id="spazioLibero" min="0" step="0.1" required>
+            <div id="spazio-error" class="error"></div>
+        </div>
+
+        <div class="form-group">
             <label for="coloreUgello">Colore Ugello:</label>
             <input type="text" id="coloreUgello" required>
             <div id="ugello-error" class="error"></div>
@@ -131,6 +137,7 @@
         </div>
 
         <button type="button" onclick="inviaDati()">Salva Dati</button>
+        <button type="button" onclick="caricaValoriDefault()">Carica Valori Default</button>
     </form>
 
     <div id="tabellaContainer" class="hidden">
@@ -141,6 +148,7 @@
                     <th>Dimensione</th>
                     <th>Resina (L)</th>
                     <th>Sabbia (Kg)</th>
+                    <th>Spazio Libero (mm)</th>
                     <th>Colore Ugello</th>
                     <th>Colore Inserti</th>
                     <th>Numero Collo</th>
@@ -168,6 +176,28 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Valori di default per i modelli
+        const valoriDefault = {
+            "60": { quantitaResina: 56, quantitaSabbia: 14, spazioLibero: 482.6 },
+            "90": { quantitaResina: 85, quantitaSabbia: 18, spazioLibero: 723.9 },
+            "120": { quantitaResina: 113, quantitaSabbia: 23, spazioLibero: 762 },
+            "150": { quantitaResina: 142, quantitaSabbia: 32, spazioLibero: 762 },
+            "210": { quantitaResina: 198, quantitaSabbia: 32, spazioLibero: 711.2 },
+            "300": { quantitaResina: 283, quantitaSabbia: 59, spazioLibero: 863.6 },
+            "450": { quantitaResina: 425, quantitaSabbia: 136, spazioLibero: 863.6 },
+            "600": { quantitaResina: 566, quantitaSabbia: 181, spazioLibero: 782.3 }
+        };
+
+        function caricaValoriDefault() {
+            const dimensione = document.getElementById('dimensione').value;
+            const valori = valoriDefault[dimensione];
+            if (valori) {
+                document.getElementById('quantitaResina').value = valori.quantitaResina;
+                document.getElementById('quantitaSabbia').value = valori.quantitaSabbia;
+                document.getElementById('spazioLibero').value = valori.spazioLibero;
+            }
+        }
+
         function showFields() {
             const modello = document.getElementById('modello').value;
             const form = document.getElementById('modelloForm');
@@ -178,7 +208,6 @@
                 form.classList.remove('hidden');
                 tabellaContainer.classList.remove('hidden');
                 
-                // Show colore inserti only for CTM models
                 if (modello === 'ctm old' || modello === 'ctm 2.0') {
                     coloreInsertiGroup.style.display = 'block';
                     document.getElementById('coloreInserti').required = true;
@@ -199,6 +228,7 @@
             document.getElementById('dimensione').value = '';
             document.getElementById('quantitaResina').value = '';
             document.getElementById('quantitaSabbia').value = '';
+            document.getElementById('spazioLibero').value = '';
             document.getElementById('coloreUgello').value = '';
             document.getElementById('coloreInserti').value = '';
             document.getElementById('numeroCollo').value = '';
@@ -221,6 +251,7 @@
                             <td>${data.dimensione}</td>
                             <td>${data.quantitaResina}</td>
                             <td>${data.quantitaSabbia}</td>
+                            <td>${data.spazioLibero}</td>
                             <td>${data.coloreUgello}</td>
                             <td>${data.coloreInserti || '-'}</td>
                             <td>${data.numeroCollo}</td>
@@ -248,6 +279,7 @@
                 'dimensione': (value) => value.trim() !== '' || 'Inserire una dimensione valida',
                 'quantitaResina': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
                 'quantitaSabbia': (value) => value > 0 || 'La quantità deve essere maggiore di 0',
+                'spazioLibero': (value) => value > 0 || 'Lo spazio libero deve essere maggiore di 0',
                 'coloreUgello': (value) => value.trim() !== '' || 'Inserire un colore valido',
                 'numeroCollo': (value) => value.trim() !== '' || 'Inserire un numero collo valido'
             };
@@ -282,12 +314,12 @@
                 dimensione: dimensione,
                 quantitaResina: parseFloat(document.getElementById('quantitaResina').value),
                 quantitaSabbia: parseFloat(document.getElementById('quantitaSabbia').value),
+                spazioLibero: parseFloat(document.getElementById('spazioLibero').value),
                 coloreUgello: document.getElementById('coloreUgello').value,
                 numeroCollo: document.getElementById('numeroCollo').value,
                 dataModifica: new Date().toISOString()
             };
 
-            // Add coloreInserti only for CTM models
             if (modello === 'ctm old' || modello === 'ctm 2.0') {
                 dati.coloreInserti = document.getElementById('coloreInserti').value;
             }
@@ -304,27 +336,3 @@
                 })
                 .catch((error) => {
                     alert("Errore durante il salvataggio: " + error.message);
-                    console.error("Errore durante il salvataggio: ", error);
-                });
-        }
-
-        function eliminaConfigurazione(modello, dimensione) {
-            if (confirm("Sei sicuro di voler eliminare questa configurazione?")) {
-                db.collection("modelli")
-                    .doc(modello)
-                    .collection("configurazioni")
-                    .doc(dimensione)
-                    .delete()
-                    .then(() => {
-                        alert("Configurazione eliminata con successo!");
-                        caricaConfigurazioni(modello);
-                    })
-                    .catch((error) => {
-                        alert("Errore durante l'eliminazione: " + error.message);
-                        console.error("Errore durante l'eliminazione: ", error);
-                    });
-            }
-        }
-    </script>
-</body>
-</html>
