@@ -1,0 +1,701 @@
+{
+  "impianti": [
+    {
+      "timestamp": "2024-12-21T18:45:08.874810",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "60",
+      "resina": "56",
+      "sotto_letto": "14",
+      "spazio_libero": "482.6",
+      "flow_control": "nero-nero-nero(3.5)",
+      "edulctor_gola": "blue 3",
+      "edulctor_ugello": "black",
+      "refil_flow": "2 ",
+      "capacita": "324",
+      "kg_sale": "9.5",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-21T18:46:27.259882",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "90",
+      "resina": "85",
+      "sotto_letto": "18",
+      "spazio_libero": "723.9",
+      "flow_control": "plug-plug-plug",
+      "edulctor_gola": "blue 3",
+      "edulctor_ugello": "black",
+      "refil_flow": "2 ",
+      "capacita": "486",
+      "kg_sale": "13.6",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:28:03.143264",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "120",
+      "resina": "113",
+      "sotto_letto": "23",
+      "spazio_libero": "762",
+      "flow_control": "plug-plug-red",
+      "edulctor_gola": "blue 4",
+      "edulctor_ugello": "violet",
+      "refil_flow": "2 ",
+      "capacita": "648",
+      "kg_sale": "17.7",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:31:12.361149",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "150",
+      "resina": "142",
+      "sotto_letto": "32",
+      "spazio_libero": "762",
+      "flow_control": "plug-plug-green",
+      "edulctor_gola": "blue 4",
+      "edulctor_ugello": "violet",
+      "refil_flow": "2",
+      "capacita": "810",
+      "kg_sale": "24.5",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:31:12.361149",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "210",
+      "resina": "198",
+      "sotto_letto": "32",
+      "spazio_libero": "711",
+      "flow_control": "plug-blue-blue",
+      "edulctor_gola": "blue 4",
+      "edulctor_ugello": "red",
+      "refil_flow": "2",
+      "capacita": "1134",
+      "kg_sale": "34.7",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:31:12.361149",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "300",
+      "resina": "283",
+      "sotto_letto": "59",
+      "spazio_libero": "863",
+      "flow_control": "plug-red-red",
+      "edulctor_gola": "blue 5",
+      "edulctor_ugello": "white",
+      "refil_flow": "2",
+      "capacita": "1620",
+      "kg_sale": "50",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:31:12.361149",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "450",
+      "resina": "425",
+      "sotto_letto": "136",
+      "spazio_libero": "863",
+      "flow_control": "blue-blue-orange",
+      "edulctor_gola": "blue 8",
+      "edulctor_ugello": "blue",
+      "refil_flow": "2",
+      "capacita": "2430",
+      "kg_sale": "64.9",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    },
+    {
+      "timestamp": "2024-12-26T16:31:12.361149",
+      "tipo_impianto": "Addolcitore",
+      "modello": "ctm 2.0",
+      "dimensione": "600",
+      "resina": "566",
+      "sotto_letto": "181",
+      "spazio_libero": "782",
+      "flow_control": "orange-orange-orange",
+      "edulctor_gola": "blue 8",
+      "edulctor_ugello": "beige",
+      "refil_flow": "2",
+      "capacita": "3240",
+      "kg_sale": "90.8",
+      "ricambi": [
+        {
+          "key": "1",
+          "descrizione": "KIT, BRINE ELBOW ASSEMBLY",
+          "codice": "01029565",
+          "shared": true,
+          "timestamp": "2024-12-26T17:01:29.344542"
+        },
+        {
+          "key": "2 ",
+          "descrizione": "INSERT, REFILL FLOW CONTROL\n2 GPM",
+          "codice": "01000602",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:04.716198"
+        },
+        {
+          "key": "4",
+          "descrizione": "CLIP, DRAIN LINE FLOW\nADAPTER",
+          "codice": "P1028012",
+          "shared": true,
+          "timestamp": "2024-12-26T17:02:32.664902"
+        },
+        {
+          "key": "7",
+          "descrizione": "NO HARD WATER BYPASS PLUG\n(FOR CONVERSION)",
+          "codice": "01029581",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:20.789589"
+        },
+        {
+          "key": "8",
+          "descrizione": "EDUCTOR PORT CAP",
+          "codice": "1029564",
+          "shared": true,
+          "timestamp": "2024-12-26T17:03:48.283253"
+        },
+        {
+          "key": "26",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM 2.0",
+          "codice": "01041070",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:11.673627"
+        },
+        {
+          "key": "27",
+          "descrizione": "KIT,PILOT BODY & O-RING, 2.0",
+          "codice": "KIT,PILOT BODY & O-RING,CTM",
+          "shared": true,
+          "timestamp": "2024-12-26T17:05:33.189462"
+        },
+        {
+          "key": "31",
+          "descrizione": "KIT,PILOT BODY & O-RING,CTM",
+          "codice": "01041075",
+          "shared": true,
+          "timestamp": "2024-12-26T17:06:17.110194"
+        },
+        {
+          "key": "34-37",
+          "descrizione": "KIT,PISTON ACTUATOR W/O-RINGS &\nFLOW VALVES & T-SEAL,CTM 2.0",
+          "codice": "01041077",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:13.339701"
+        },
+        {
+          "key": "35",
+          "descrizione": "KIT PISTON O-RINGS AND T-SEALS",
+          "codice": "01029577",
+          "shared": true,
+          "timestamp": "2024-12-26T17:07:38.071005"
+        }
+      ]
+    }
+  ],
+  "last_update": "2024-12-26T17:07:38.071870"
+}
